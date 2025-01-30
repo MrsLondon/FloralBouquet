@@ -54,7 +54,6 @@ Follow these steps to get the project up and running locally:
 - **Customize Your Order :**  Choose your flowers, colors, and peronal messages.
 - **Place Your Orders:** dd your bouquet to the cart and check out securely.
 
-- **Collaborate:** Share the board with your team for seamless collaboration.
 
 ## Contributing
 
