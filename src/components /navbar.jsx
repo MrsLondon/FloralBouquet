@@ -6,7 +6,7 @@ import '../style/navbar.css';
 function Navbar({ onClick }) {
   return (
     <div className='navbar'> 
-      <div className='header'> {/* New wrapper for title & choices */}
+      <div className='header'> 
         <div className='title'>
           <h1>FloralBouquet</h1>
           <div className='icons'>
