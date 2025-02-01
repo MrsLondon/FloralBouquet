@@ -1,10 +1,8 @@
-import '../style/homepage.css';
-import Card from '../components /card.jsx';
+//import '../style/homepage.css';
+import Card from '../components/Card.jsx';
+
 
 function Homepage() {
-  
-  
- 
   
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-center p-5">
