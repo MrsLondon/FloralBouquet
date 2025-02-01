@@ -24,7 +24,7 @@ function Homepage() {
         return (
           <div key={flower.id} className='flower'>
             <h3>{flower.name}</h3>
-            <img src={flower.image} alt={flower.name} />
+            <img src={flower.imageUrl} alt={flower.name} />
             <p>{flower.description}</p>
             <p>Price: ${flower.price}</p>
           </div>
