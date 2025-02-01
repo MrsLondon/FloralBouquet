@@ -6,7 +6,7 @@ function Homepage() {
   const [flowers, setFlowers] = useState([]);
   
   useEffect(() => {
-    axios.get('http://localhost:5005/flowers')
+    axios.get('https://flowerstore-api-json-server.onrender.com/flowers')
       .then(response => {
         setFlowers(response.data);
       })
