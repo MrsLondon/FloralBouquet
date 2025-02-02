@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Card() {
   const [flowers, setFlowers] = useState([]);
@@ -17,19 +18,25 @@ function Card() {
   return (
     
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+    
       {flowers.map(flower => (
+        
         <div key={flower.id} className="bg-white shadow-lg p-4 rounded-lg flex flex-col h-full">
+        <Link to={`/flower/${flower.id}`} >
           <img 
             src={flower.imageUrl} 
             alt={flower.name} 
-            className="object-cover rounded-lg"
+            className=" h-120 w-full object-cover rounded-lg"
           />
+          </Link>
           <h3 className="text-2xl font-bold font-[Rosarivo] mt-2">{flower.name}</h3>
           <p className="text-gray-700 mt-2 flex-grow">{flower.description}</p>
           <p className="text-gray-600 font-semibold mt-1">From: {flower.price}</p>
         </div>
       ))}
+  
     </div>
+        
   );
 }  
 
