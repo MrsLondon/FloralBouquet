@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-const GiftPage = () => {
+const DaisyPage = () => {
   const [flowers, setFlowers] = useState([]); 
 
   useEffect(() => {
@@ -15,12 +15,12 @@ const GiftPage = () => {
       });
   }, []);
 
- 
-  const giftFlowers = flowers.filter(flower => flower.category.includes("gift"));
+  
+  const giftFlowers = flowers.filter(flower => flower.category.includes("daisy"));
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">
-      <h1 className="text-3xl font-bold text-center mb-6">Gift Flowers</h1>
+      <h1 className="text-3xl font-bold text-center mb-6">Daisy</h1>
 
       {giftFlowers.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -46,4 +46,4 @@ const GiftPage = () => {
   );
 };
 
-export default GiftPage;
+export default DaisyPage;
