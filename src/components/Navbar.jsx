@@ -29,27 +29,7 @@ function Navbar({ onClick }) {
           <li>
           <Link to="/Gift-bouquet" className="hover:text-orange-600">Gift</Link>
           </li>
-          <li>
-          <Link to="/daisy" className="hover:text-orange-600">Daisy</Link>
-          </li>
-          <li>
-          <Link to="/sunflower" className="hover:text-orange-600">Sunflower</Link>
-          </li>
-          <li>
-          <Link to="/roses" className="hover:text-orange-600">Roses</Link>
-          </li>
-          <li>
-          <Link to="/tulips" className="hover:text-orange-600">Tulips</Link>
-          </li>
-          <li>
-          <Link to="/lilies" className="hover:text-orange-600">Lilies</Link>
-          </li>
-          <li>
-          <Link to="/peony" className="hover:text-orange-600">Peony</Link>
-          </li>
-          <li>
-          <Link to="/lavender" className="hover:text-orange-600">Lavender</Link>
-          </li>
+
         </ul>
       </div>
     </div>
