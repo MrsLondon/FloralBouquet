@@ -8,7 +8,10 @@ function Navbar({ onClick }) {
     <div className='bg-orange-200 p-4'> 
       <div className='flex flex-col items-center'> 
         <div className='relative flex items-center w-full px-10'>
-          <h1 className='mx-auto text-5xl font-bold'>FloralBouquet</h1>
+        <Link to="/" className="hover:text-orange-600 mx-auto text-5xl font-bold" > 
+        <h1>FloralBouquet</h1>
+        </Link>
+          
           <div className='absolute right-10 flex gap-6'>
             <img src={search} alt='search' onClick={onClick} className='cursor-pointer w-8' />
             <img src={user} alt='user' onClick={onClick} className='cursor-pointer w-8' />
@@ -18,7 +21,7 @@ function Navbar({ onClick }) {
         <ul className='flex justify-center gap-5 list-none p-2 text-lg'>
           
           <li>
-             <Link to="/" className="hover:text-orange-600">Bouquet</Link>
+             <Link to="/AllBouquet" className="hover:text-orange-600">Bouquet</Link>
           </li>
           <li>
             <Link to="/Valentine-bouquet" className="hover:text-orange-600">Valentine's Day</Link>
