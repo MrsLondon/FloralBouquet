@@ -16,7 +16,7 @@ const DaisyPage = () => {
   }, []);
 
   
-  const giftFlowers = flowers.filter(flower => flower.category.includes("daisy"));
+  const giftFlowers = flowers.filter(flower => flower.type.includes("daisy"));
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">
