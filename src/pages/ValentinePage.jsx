@@ -19,7 +19,7 @@ const ValentinePage = () => {
   const giftFlowers = flowers.filter(flower => flower.category.includes("valentine"));
 
   return (
-    <div className="min-h-screen p-6 bg-gray-100">
+    <div className="min-h-screen p-6 bg-white-100">
       <h1 className="text-3xl font-bold text-center mb-6">Valentine's Day</h1>
 
             {/* Subcategory Navigation */}
@@ -33,7 +33,9 @@ const ValentinePage = () => {
       {giftFlowers.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {giftFlowers.map(flower => (
-            <div key={flower.id} className="bg-white shadow-lg p-4 rounded-lg flex flex-col h-full">
+            <div key={flower.id} 
+            // className="bg-white shadow-lg p-4 rounded-lg flex flex-col h-full"
+            >
               <Link to={`/flower/${flower.id}`}>
                 <img 
                   src={flower.imageUrl} 

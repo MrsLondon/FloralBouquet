@@ -13,7 +13,10 @@ import TulipsPage from './pages/TulipsPage';
 import LiliesPage from './pages/LiliesPage';
 import PeonyPage from './pages/PeonyPage';
 import LavenderPage from './pages/LavenderPage';
+import AllBouquet from "./pages/AllBouquet";
+import Footer from './pages/Footer';
 import './App.css';
+
 
 function App() {
   return (
@@ -21,6 +24,7 @@ function App() {
     <Navbar />
       <Routes>
         <Route path="/" element={<Homepage />} />
+        <Route path="/AllBouquet" element={<AllBouquet />} />
         <Route path="/Valentine-bouquet" element={<ValentinePage />} />
         <Route path="/Wedding-bouquet" element={<WeddingPage />} />
         <Route path="/Gift-bouquet" element={<GiftPage />} />
@@ -34,6 +38,8 @@ function App() {
         <Route path="/lavender" element={<LavenderPage />} />
         <Route path="*" element={<ErrorPage />} />  
       </Routes>
+<Footer />
+
     </div>
       
     

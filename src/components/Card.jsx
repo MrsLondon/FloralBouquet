@@ -21,7 +21,9 @@ function Card() {
     
       {flowers.map(flower => (
         
-        <div key={flower.id} className="bg-white shadow-lg p-4 rounded-lg flex flex-col h-full">
+        <div key={flower.id} 
+        // className="bg-white shadow-lg p-4 rounded-lg flex flex-col h-full"
+        >
         <Link to={`/flower/${flower.id}`} >
           <img 
             src={flower.imageUrl} 
