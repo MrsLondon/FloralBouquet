@@ -1,21 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react"; 
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { FlowerContext } from "../context/FlowerContext"// Import the context
 
 const DaisyPage = () => {
-  const [flowers, setFlowers] = useState([]); 
+  // Access the flowers data from the context
+  const { flowers } = useContext(FlowerContext);
 
-  useEffect(() => {
-    axios.get("https://flowerstore-api-json-server.onrender.com/flowers")
-      .then(response => {
-        setFlowers(response.data);
-      })
-      .catch(error => {
-        console.error("There was an error!", error);
-      });
-  }, []);
-
-  
   const giftFlowers = flowers.filter(flower => flower.type.includes("daisy"));
 
   return (

@@ -17,6 +17,7 @@ import AllBouquet from "./pages/AllBouquet";
 import Footer from './components/Footer';
 import { SearchBar } from "./components/SearchBar";
 import { useState } from "react";
+import { FlowerProvider } from "./context/FlowerContext";
 
 
 import './App.css';
@@ -27,6 +28,7 @@ function App() {
   const [results, setResults] = useState([]);
 
   return (
+    
     <div> 
             <Navbar onClick={() => setShowSearch(!showSearch)} />
 
@@ -56,7 +58,7 @@ function App() {
               <Footer />
 
     </div>
-      
+  
     
   );
 }

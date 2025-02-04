@@ -1,17 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react"; 
+import { FlowerContext } from "../context/FlowerContext"; // Make sure the path is correct
 import { Link } from "react-router-dom";
-import axios from "axios";
+
 
 const GiftPage = () => {
-  const [flowers, setFlowers] = useState([]); 
+  // Access the flowers data from the context
+  const { flowers } = useContext(FlowerContext);
 
-  useEffect(() => {
-    axios.get("https://flowerstore-api-json-server.onrender.com/flowers")
-      .then(response => setFlowers(response.data))
-      .catch(error => console.error("There was an error!", error));
-  }, []);
-
-  const giftFlowers = flowers.filter(flower => flower.category.includes("gift"));
+  // Filter flowers for gifts
+  const giftFlowers = flowers.filter((flower) =>
+    flower.category.includes("gift")
+  );
 
   return (
     <div className="min-h-screen p-6 bg-white-100">
