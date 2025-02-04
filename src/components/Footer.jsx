@@ -21,7 +21,7 @@ const Footer = () => {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">FloralBouquet</h1>
           <p className="text-gray-600 mt-2 text-sm">
-            This is a clone website. We do not own any of the images displayed on this platform.
+          We do not own the rights to the images displayed on this platform. 
           </p>
         </div>
 

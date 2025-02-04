@@ -22,8 +22,8 @@ const ValentinePage = () => {
     <div className="min-h-screen p-6 bg-white-100">
       <h1 className="text-3xl font-bold text-center mb-6">Valentine's Day</h1>
 
-            {/* Subcategory Navigation */}
-            <ul className="flex justify-center gap-6 text-lg font-semibold mb-6">
+    
+     <ul className="flex justify-center gap-6 text-lg font-semibold mb-6">
       <li>
           <Link to="/roses" className="hover:text-orange-600">Roses</Link>
           </li>

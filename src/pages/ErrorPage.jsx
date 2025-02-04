@@ -1,4 +1,4 @@
-// src/components/NotFound.jsx
+
 const NotFound = () => {
     return (
       <div>

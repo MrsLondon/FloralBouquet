@@ -22,7 +22,7 @@ const WeddingPage = () => {
     <div className="min-h-screen p-6 bg-white-100">
       <h1 className="text-3xl font-bold text-center mb-6">Wedding</h1>
 
-      {/* Subcategory Navigation */}
+      
       <ul className="flex justify-center gap-6 text-lg font-semibold mb-6">
       <li>
           <Link to="/daisy" className="hover:text-orange-600">Daisy</Link>

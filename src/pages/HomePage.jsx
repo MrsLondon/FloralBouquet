@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Background from "../assets/footer.jpg";
-import Footer from '../pages/Footer';
+import Footer from '../components/Footer';
 const HomePage = () => {
   const [flowers, setFlowers] = useState([]); 
 

@@ -14,7 +14,7 @@ import LiliesPage from './pages/LiliesPage';
 import PeonyPage from './pages/PeonyPage';
 import LavenderPage from './pages/LavenderPage';
 import AllBouquet from "./pages/AllBouquet";
-import Footer from './pages/Footer';
+import Footer from './components/Footer';
 import './App.css';
 
 

@@ -17,18 +17,18 @@ const GiftPage = () => {
     <div className="min-h-screen p-6 bg-white-100">
       <h1 className="text-3xl font-bold text-center mb-6">Gift Flowers</h1>
 
-      {/* Subcategory Navigation */}
+      
       <ul className="flex justify-center gap-6 text-lg font-semibold mb-6">
         <li><Link to="/lilies" className="hover:text-orange-600">Lilies</Link></li>
         <li><Link to="/peony" className="hover:text-orange-600">Peony</Link></li>
       </ul>
 
-      {/* Display Gift Flowers */}
+     
       {giftFlowers.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {giftFlowers.map(flower => (
             <div key={flower.id} 
-            // className="bg-white shadow-lg p-4 rounded-lg flex flex-col h-full"
+           
             >
               <Link to={`/flower/${flower.id}`}>
                 <img src={flower.imageUrl} alt={flower.name} className="h-120 w-full object-cover rounded-lg" />
