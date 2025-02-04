@@ -15,13 +15,27 @@ import PeonyPage from './pages/PeonyPage';
 import LavenderPage from './pages/LavenderPage';
 import AllBouquet from "./pages/AllBouquet";
 import Footer from './components/Footer';
+import { SearchBar } from "./components/SearchBar";
+import { useState } from "react";
+
+
 import './App.css';
 
 
 function App() {
+  const [showSearch, setShowSearch] = useState(false);
+  const [results, setResults] = useState([]);
+
   return (
     <div> 
-    <Navbar />
+            <Navbar onClick={() => setShowSearch(!showSearch)} />
+
+    {/* Search Bar (only shown when 'showSearch' is true) */}
+    {showSearch && (
+      <div>
+        <SearchBar setResults={setResults} results={results} />
+      </div>
+    )}
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/AllBouquet" element={<AllBouquet />} />
@@ -37,8 +51,9 @@ function App() {
         <Route path="/peony" element={<PeonyPage />} /> 
         <Route path="/lavender" element={<LavenderPage />} />
         <Route path="*" element={<ErrorPage />} />  
+        <Route path="/flower/:id" element={<ProductDetailsPage />} /> 
       </Routes>
-<Footer />
+              <Footer />
 
     </div>
       
