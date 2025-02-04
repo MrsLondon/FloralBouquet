@@ -57,7 +57,7 @@ function ProductDetailsPage() {
           </button>
 
           
-          <p className="text-gray-500 text-sm mt-4">🌿 Free shipping on orders over $25</p>
+          <p className="text-gray-500 text-sm mt-4">🌿 Free shipping on orders over €25</p>
           <Link to="/" className="text-gray-500 text-sm mt-2">← Back to home</Link>
         </div>
 
