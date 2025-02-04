@@ -28,7 +28,7 @@ function Card() {
           <img 
             src={flower.imageUrl} 
             alt={flower.name} 
-            className=" h-120 w-full object-cover rounded-lg"
+            className="w-full max-w-xs h-auto object-contain rounded-lg shadow-md"
           />
           </Link>
           <h3 className="text-2xl font-bold font-[Rosarivo] mt-2">{flower.name}</h3>
