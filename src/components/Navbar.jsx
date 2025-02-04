@@ -13,7 +13,9 @@ function Navbar({ onClick }) {
         </Link>
           
           <div className='absolute right-10 flex gap-6'>
+            <div>
             <img src={search} alt='search' onClick={onClick} className='cursor-pointer w-8' />
+            </div>
             <img src={user} alt='user' onClick={onClick} className='cursor-pointer w-8' />
             <img src={bag} alt='bag' onClick={onClick} className='cursor-pointer w-8' />
           </div>
