@@ -23,7 +23,7 @@ function ProductDetailsPage() {
 
   return (
     
-    <div className="min-h-screen p-6 flex justify-center items-center bg-gray-100">
+    <div className="min-h-screen p-6 flex justify-center items-center bg-white-100">
       <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         
        
