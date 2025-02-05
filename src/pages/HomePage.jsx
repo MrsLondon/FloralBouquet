@@ -25,14 +25,14 @@ const HomePage = () => {
       <p className=" text-center text-lg text-gray-700 leading-relaxed mb-6"> Limited offers, Get them before we sold out!!!</p>
 
       {giftFlowers.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 justify-items-center pt-10">
           {giftFlowers.map(flower => (
             <div key={flower.id} >
               <Link to={`/flower/${flower.id}`}>
                 <img 
                   src={flower.imageUrl} 
                   alt={flower.name} 
-                  className="h-120 w-full object-cover rounded-lg"
+                  className="w-full max-w-xs h-auto object-contain rounded-lg shadow-md"
                 />
               </Link>
               <h3 className=" text-center text-2xl font-bold font-[Rosarivo] mt-2">{flower.name}</h3>
