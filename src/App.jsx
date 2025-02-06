@@ -17,7 +17,7 @@ import AllBouquet from "./pages/AllBouquet";
 import Footer from './components/Footer';
 import { SearchBar } from "./components/SearchBar";
 import { useState } from "react";
-import { FlowerProvider } from "./context/FlowerContext";
+
 
 
 import './App.css';
@@ -30,7 +30,8 @@ function App() {
   return (
     
     <div> 
-            <Navbar onClick={() => setShowSearch(!showSearch)} />
+
+    <Navbar onClick={() => setShowSearch(!showSearch)} />
 
     {/* Search Bar (only shown when 'showSearch' is true) */}
     {showSearch && (
@@ -38,6 +39,7 @@ function App() {
         <SearchBar setResults={setResults} results={results} />
       </div>
     )}
+    
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/AllBouquet" element={<AllBouquet />} />
@@ -55,7 +57,7 @@ function App() {
         <Route path="*" element={<ErrorPage />} />  
         <Route path="/flower/:id" element={<ProductDetailsPage />} /> 
       </Routes>
-              <Footer />
+            <Footer />
 
     </div>
   

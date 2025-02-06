@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext } from "react"; 
 import { Link } from "react-router-dom";
-import { FlowerContext } from "../context/FlowerContext"// Import the context
+import { FlowerContext } from "../context/FlowerContext"
 
 const DaisyPage = () => {
-  // Access the flowers data from the context
+
   const { flowers } = useContext(FlowerContext);
 
   const giftFlowers = flowers.filter(flower => flower.type.includes("daisy"));

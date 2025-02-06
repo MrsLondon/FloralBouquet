@@ -1,18 +1,13 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState, useContext } from "react";
+import { FlowerContext } from "../context/FlowerContext"; 
 import { SearchResult } from "./SearchResult";
 
 export const SearchBar = ({ setResults }) => {
   const [input, setInput] = useState("");
-  const [flowers, setFlowers] = useState([]);
-  const [showResults, setShowResults] = useState(true);  // State to control visibility of results
-  const [showSearchBar, setShowSearchBar] = useState(true);  // State to control visibility of search bar
+  const [showResults, setShowResults] = useState(true);
+  const [showSearchBar, setShowSearchBar] = useState(true);
 
-  useEffect(() => {
-    axios.get("https://flowerstore-api-json-server.onrender.com/flowers")
-      .then(response => setFlowers(response.data))
-      .catch(error => console.error("There was an error!", error));
-  }, []);
+  const { flowers } = useContext(FlowerContext);
 
   const fetchData = (value) => {
     const results = flowers.filter((flower) =>
