@@ -1,9 +1,13 @@
 import bag from '../assets/bag-2.png';
 import search from '../assets/search-normal.png';
 import user from '../assets/user.png';
+import { useState } from 'react'; 
+import { SearchBar } from './SearchBar'; 
 import { Link } from 'react-router-dom';
 
 function Navbar({ onClick }) {
+  const [showSearch, setShowSearch] = useState(false); 
+
   return (
     <div className='bg-orange-200 p-4 relative'>
       {/* Logo - Centered */}
@@ -16,10 +20,22 @@ function Navbar({ onClick }) {
 
       {/* Icons - Positioned to the right */}
       <div className='absolute right-4 sm:right-10 flex gap-3 sm:gap-6'>
-        <img src={search} alt='search' onClick={onClick} className='cursor-pointer w-6 sm:w-8' />
+        <img 
+         src={search} 
+         alt='search' 
+         onClick={() => setShowSearch(!showSearch)} 
+         className='cursor-pointer w-6 sm:w-8' 
+        />
         <img src={user} alt='user' onClick={onClick} className='cursor-pointer w-6 sm:w-8' />
         <img src={bag} alt='bag' onClick={onClick} className='cursor-pointer w-6 sm:w-8' />
       </div>
+
+         {/* Search Bar - Appears Below the Search Icon */}
+         {showSearch && (  
+        <div className="absolute right-4 sm:right-10 top-16 shadow-md rounded-lg p-2 w-72 sm:w-96 z-50">
+          <SearchBar />  
+        </div>
+      )}
 
       {/* Navigation Links */}
       <ul className='flex flex-col sm:flex-row justify-center gap-3 sm:gap-5 list-none p-2 text-lg mt-12 sm:mt-16'>
