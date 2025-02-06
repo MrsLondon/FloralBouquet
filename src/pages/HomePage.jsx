@@ -1,20 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
+import { FlowerContext } from "../context/FlowerContext"; 
 import { Link } from "react-router-dom";
-import axios from "axios";
 import Background from "../assets/footer.jpg";
-import Footer from '../components/Footer';
-const HomePage = () => {
-  const [flowers, setFlowers] = useState([]); 
 
-  useEffect(() => {
-    axios.get("https://flowerstore-api-json-server.onrender.com/flowers")
-      .then(response => {
-        setFlowers(response.data);
-      })
-      .catch(error => {
-        console.error("There was an error!", error);
-      });
-  }, []);
+const HomePage = () => {
+ 
+
+  const { flowers } = useContext(FlowerContext);
 
   
   const giftFlowers = flowers.filter(flower => flower.category.includes("homepage"));

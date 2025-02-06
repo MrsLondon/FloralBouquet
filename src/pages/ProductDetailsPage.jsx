@@ -1,17 +1,12 @@
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react"; 
+import { FlowerContext } from "../context/FlowerContext"; 
 import { Link } from "react-router-dom";
 
 function ProductDetailsPage() {
   const { flowerId } = useParams();
-  const [flower, setFlower] = useState(null);
-
-  useEffect(() => {
-    fetch(`https://flowerstore-api-json-server.onrender.com/flowers/${flowerId}`)
-      .then(response => response.json())
-      .then(data => setFlower(data))
-      .catch(error => console.error("There was an error!", error));
-  }, []);
+  const { flowers } = useContext(FlowerContext);
+  const flower = flowers.find(f => f.id === Number(flowerId));
 
   if (!flower) {
     return (
@@ -57,7 +52,7 @@ function ProductDetailsPage() {
           </button>
 
           
-          <p className="text-gray-500 text-sm mt-4">🌿 Free shipping on orders over €25</p>
+          <p className="text-gray-500 text-sm mt-4">🌿 Free shipping on orders over $50.</p>
           <Link to="/" className="text-gray-500 text-sm mt-2">← Back to home</Link>
         </div>
 

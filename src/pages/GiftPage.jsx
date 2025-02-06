@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react"; 
+import { useState, useContext } from "react"; 
 import { FlowerContext } from "../context/FlowerContext"; // Make sure the path is correct
 import { Link } from "react-router-dom";
 
