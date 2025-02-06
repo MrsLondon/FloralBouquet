@@ -1,45 +1,40 @@
-import {  Routes, Route } from "react-router-dom";
-import Homepage from './pages/HomePage';
-import Navbar from './components/Navbar';
-import ValentinePage from './pages/ValentinePage';
-import WeddingPage from './pages/WeddingPage';
-import GiftPage from './pages/GiftPage';
-import ErrorPage from './pages/ErrorPage';
+import { Routes, Route } from "react-router-dom";
+import Homepage from "./pages/HomePage";
+import Navbar from "./components/Navbar";
+import ValentinePage from "./pages/ValentinePage";
+import WeddingPage from "./pages/WeddingPage";
+import GiftPage from "./pages/GiftPage";
+import ErrorPage from "./pages/ErrorPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
-import DaisyPage from './pages/DaisyPage';
-import SunflowerPage from './pages/SunflowerPage';
-import RosesPage from './pages/RosesPage';
-import TulipsPage from './pages/TulipsPage';
-import LiliesPage from './pages/LiliesPage';
-import PeonyPage from './pages/PeonyPage';
-import LavenderPage from './pages/LavenderPage';
+import DaisyPage from "./pages/DaisyPage";
+import SunflowerPage from "./pages/SunflowerPage";
+import RosesPage from "./pages/RosesPage";
+import TulipsPage from "./pages/TulipsPage";
+import LiliesPage from "./pages/LiliesPage";
+import PeonyPage from "./pages/PeonyPage";
+import LavenderPage from "./pages/LavenderPage";
 import AllBouquet from "./pages/AllBouquet";
-import Footer from './components/Footer';
+import Footer from "./components/Footer";
 import { SearchBar } from "./components/SearchBar";
 import { useState } from "react";
+import { FlowerProvider } from "./context/FlowerContext";
 
-
-
-import './App.css';
-
+import "./App.css";
 
 function App() {
   const [showSearch, setShowSearch] = useState(false);
   const [results, setResults] = useState([]);
 
   return (
-    
-    <div> 
+    <div>
+      <Navbar onClick={() => setShowSearch(!showSearch)} />
 
-    <Navbar onClick={() => setShowSearch(!showSearch)} />
-
-    {/* Search Bar (only shown when 'showSearch' is true) */}
-    {showSearch && (
-      <div>
-        <SearchBar setResults={setResults} results={results} />
-      </div>
-    )}
-    
+      {/* Search Bar (only shown when 'showSearch' is true) */}
+      {showSearch && (
+        <div>
+          <SearchBar />
+        </div>
+      )}
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/AllBouquet" element={<AllBouquet />} />
@@ -52,16 +47,13 @@ function App() {
         <Route path="/roses" element={<RosesPage />} />
         <Route path="/tulips" element={<TulipsPage />} />
         <Route path="/lilies" element={<LiliesPage />} />
-        <Route path="/peony" element={<PeonyPage />} /> 
+        <Route path="/peony" element={<PeonyPage />} />
         <Route path="/lavender" element={<LavenderPage />} />
-        <Route path="*" element={<ErrorPage />} />  
-        <Route path="/flower/:id" element={<ProductDetailsPage />} /> 
+        <Route path="*" element={<ErrorPage />} />
+        <Route path="/flower/:id" element={<ProductDetailsPage />} />
       </Routes>
-            <Footer />
-
+      <Footer />
     </div>
-  
-    
   );
 }
 

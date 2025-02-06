@@ -4,11 +4,10 @@ import axios from "axios";
 // Create a context for flowers
 export const FlowerContext = createContext();
 
-// Create a provider component
 export const FlowerProvider = ({ children }) => {
   const [flowers, setFlowers] = useState([]);
-
-  // Fetch flowers data on component mount
+  const [filteredFlowers, setFilteredFlowers] = useState([]);
+ 
   useEffect(() => {
     axios
       .get("https://flowerstore-api-json-server.onrender.com/flowers")
@@ -16,10 +15,13 @@ export const FlowerProvider = ({ children }) => {
       .catch((error) => console.error("There was an error!", error));
   }, []);
 
-  // Provide the flowers data to all children components
+
   return (
-    <FlowerContext.Provider value={{ flowers }}>
+    <FlowerContext.Provider
+      value={{ flowers, filteredFlowers, setFilteredFlowers }}
+    >
       {children}
     </FlowerContext.Provider>
   );
 };
+
