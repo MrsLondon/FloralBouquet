@@ -50,8 +50,7 @@ function App() {
         <Route path="/peony" element={<PeonyPage />} />
         <Route path="/lavender" element={<LavenderPage />} />
         <Route path="*" element={<ErrorPage />} />
-        <Route path="/flower/:id" element={<ProductDetailsPage />} />
-      </Routes>
+        </Routes>
       <Footer />
     </div>
   );
