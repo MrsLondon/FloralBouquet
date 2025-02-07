@@ -18,8 +18,9 @@ const GiftPage = () => {
 
       
       <ul className="flex justify-center gap-6 text-lg font-semibold mb-6">
-        <li><Link to="/lilies" className="hover:text-orange-600">Lilies</Link></li>
+        <li><Link to="/daisy" className="hover:text-orange-600">Daisy</Link></li>
         <li><Link to="/lavender" className="hover:text-orange-600">Lavender</Link></li>
+        <li><Link to="/sunflower" className="hover:text-orange-600">Sunflower</Link></li>
       </ul>
 
      
