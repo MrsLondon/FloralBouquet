@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { FlowerContext } from "../context/FlowerContext";
 
+
 const PeonyPage = () => {
   const { flowers } = useContext(FlowerContext);
   const location = useLocation();
@@ -12,6 +13,8 @@ const PeonyPage = () => {
 
   return (
     <div className="min-h-screen p-6 bg-white-100">
+
+
       <h1 className="text-center text-3xl font-bold mb-6">
         <Link to="/Wedding-bouquet?context=wedding">Wedding</Link>
       </h1>
@@ -38,6 +41,7 @@ const PeonyPage = () => {
           </Link>
         </li>
       </ul>
+
 
       {giftFlowers.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 justify-items-center">
