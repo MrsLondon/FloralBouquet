@@ -40,7 +40,8 @@ function ProductDetailsPage() {
           <p className="text-gray-700 mt-4">{flower.description}</p>
           <p className="text-green-600 font-semibold text-3xl mt-4">{flower.price}</p>
 
-          <div className="mt-6 flex items-center gap-4">
+          <div className="flex flex-row items-center gap-4 mt-6">
+           <div className="mt-6 flex items-center gap-4 ">
             <label className="text-gray-700 font-medium">Quantity:</label>
             <input 
               type="number" 
@@ -52,11 +53,14 @@ function ProductDetailsPage() {
           </div>
 
           <button
-            className="mt-6 bg-sky-800 text-white py-3 px-6 rounded-lg hover:bg-sky-700 transition-all text-lg w-full md:w-auto"
+            className="mt-6 bg-800 text-black py-3 px-6 rounded-lg hover:bg-sky-700 transition-all text-xs w-full w-16 border-2 border-gray-300 "
             onClick={handleAddToCart} // Trigger addToCart on click
           >
             Add to Cart
-          </button>
+          </button> 
+          </div>
+
+          
 
           <p className="text-gray-500 text-sm mt-4">🌿 Free shipping on orders over €25.</p>
           <Link to="/" className="text-gray-500 text-sm mt-2">← Back to home</Link>
