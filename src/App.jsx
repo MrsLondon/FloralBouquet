@@ -17,8 +17,11 @@ import AllBouquet from "./pages/AllBouquet";
 import Footer from "./components/Footer";
 import { SearchBar } from "./components/SearchBar";
 import { useState } from "react";
-import { FlowerProvider } from "./context/FlowerContext";
 import { Success, Cancel } from "./pages/FeedbackPages";
+import SignupPage from "./pages/SignupPage"; 
+import LoginPage from "./pages/LoginPage"; 
+import ProtectedRoute from "./components/ProtectedRoutes";
+
 
 import "./App.css";
 
@@ -53,6 +56,9 @@ function App() {
         <Route path="*" element={<ErrorPage />} />
         <Route path="/success" element={<Success />} />
         <Route path="/cancel" element={<Cancel />} />
+        <Route path="/signup" element={<ProtectedRoute isPrivate={false}><SignupPage /></ProtectedRoute>} />
+        <Route path="/login" element={<ProtectedRoute isPrivate={false}><LoginPage /></ProtectedRoute>} />
+
       </Routes>
 
       <Footer />
