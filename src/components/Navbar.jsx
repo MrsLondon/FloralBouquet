@@ -5,10 +5,11 @@ import { useState } from 'react';
 import { SearchBar } from './SearchBar'; 
 import { Link } from 'react-router-dom';
 import logo2 from '../assets/logo2.png';
+import Cart from "../pages/Cart"; 
 
 function Navbar({ onClick }) {
   const [showSearch, setShowSearch] = useState(false); 
-
+  const [isCartOpen, setIsCartOpen] = useState(false);
   
 
   return (
@@ -36,8 +37,14 @@ function Navbar({ onClick }) {
          className='cursor-pointer w-6 sm:w-8' 
         />
         </div>
-        <img src={user} alt='user' className='cursor-pointer w-6 sm:w-8' />
-        <img src={bag} alt='bag' className='cursor-pointer w-6 sm:w-8' />
+        <img src={user} alt='user' className='cursor-pointer w-6 sm:w-8' 
+        />
+        <img 
+          src={bag} 
+          alt='cart' 
+          onClick={() => setIsCartOpen(!isCartOpen)} 
+          className='cursor-pointer w-6 sm:w-8' 
+        />
       </div>
 
          
@@ -47,6 +54,8 @@ function Navbar({ onClick }) {
         </div>
       )}
 
+            {/* Cart Sidebar Component */}
+            <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
      
       <ul className='flex flex-col sm:flex-row justify-center gap-3 sm:gap-5 list-none p-2 text-lg mt-12 sm:mt-16'>
         <li><Link to="/AllBouquet" className="hover:text-orange-600">Bouquet</Link></li>

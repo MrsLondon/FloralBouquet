@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useState, useContext } from "react";
 import { FlowerContext } from "../context/FlowerContext"; 
 
+
 const PeonyPage = () => {
   const {flowers} = useContext(FlowerContext); 
   
@@ -9,7 +10,16 @@ const PeonyPage = () => {
 
   return (
     <div className="min-h-screen p-6 bg-white-100">
-      <h1 className="text-3xl font-bold text-center mb-6">Peony</h1>
+    <h1 className="text-3xl font-bold text-center mb-6">Valentine's Day</h1>
+
+  
+   <ul className="flex justify-center gap-6 text-lg font-semibold mb-6">
+    <li>
+        <Link to="/roses" className="hover:text-orange-600">Roses</Link>
+        </li>
+      <li><Link to="/peony" className="hover:text-orange-600">Peony</Link></li>
+      <li><Link to="/tulips" className="hover:text-orange-600">Tulips</Link></li>
+    </ul>
 
       {giftFlowers.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 justify-items-center">

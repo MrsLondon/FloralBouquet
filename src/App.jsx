@@ -18,6 +18,7 @@ import Footer from "./components/Footer";
 import { SearchBar } from "./components/SearchBar";
 import { useState } from "react";
 import { FlowerProvider } from "./context/FlowerContext";
+import { Success, Cancel } from "./pages/FeedbackPages";
 
 import "./App.css";
 
@@ -50,7 +51,8 @@ function App() {
         <Route path="/peony" element={<PeonyPage />} />
         <Route path="/lavender" element={<LavenderPage />} />
         <Route path="*" element={<ErrorPage />} />
-        <Route path="/flower/:id" element={<ProductDetailsPage />} />
+        <Route path="/success" element={<Success />} />
+        <Route path="/cancel" element={<Cancel />} />
       </Routes>
       <Footer />
     </div>
