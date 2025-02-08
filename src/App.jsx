@@ -53,7 +53,6 @@ function App() {
         <Route path="*" element={<ErrorPage />} />
         <Route path="/success" element={<Success />} />
         <Route path="/cancel" element={<Cancel />} />
-      </Routes>
       <Footer />
     </div>
   );
