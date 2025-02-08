@@ -6,10 +6,28 @@ import Footer from "../components/Footer";
 import { FlowerContext } from "../context/FlowerContext";
 
 const HomePage = () => {
-  //const [flowers, setFlowers] = useState([]);
+  
   const { flowers } = useContext(FlowerContext);
   const { filteredFlowers } = useContext(FlowerContext);
-  const results = filteredFlowers.length > 0 ? filteredFlowers : flowers;
+  const [ randomFlowers, setRandomFlowers ] = useState([]);
+
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
+
+  useEffect(() => {
+    
+    
+    const shuffledFlowers = shuffleArray([...flowers]);
+    setRandomFlowers(shuffledFlowers);
+  }, [flowers]);
+
+  const results = filteredFlowers.length > 0 ? filteredFlowers : randomFlowers;
+  const limitedResults = results.slice(0, 12);
 
   return (
     <div className="min-h-screen p-6 bg-white-100 ">
@@ -19,9 +37,9 @@ const HomePage = () => {
         Limited offers, Get them before we sold out!!!
       </p>
 
-      {results.length > 0 ? (
+      {limitedResults.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 justify-items-center pt-10">
-          {results.map((flower) => (
+          {limitedResults.map((flower) => (
             <div key={flower.id}>
               <Link to={`/flower/${flower.id}`}>
                 <img
@@ -33,7 +51,7 @@ const HomePage = () => {
               <h3 className=" text-center text-2xl font-bold font-[Rosarivo] mt-2">
                 {flower.name}
               </h3>
-              {/* <p className="text-gray-700 mt-2 flex-grow">{flower.description}</p> */}
+              
               <p className=" text-center text-gray-600 font-semibold mt-1">
                 From: {flower.price}
               </p>
