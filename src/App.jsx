@@ -36,7 +36,7 @@ function App() {
           <SearchBar />
         </div>
       )}
-      <Routes>
+     <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/AllBouquet" element={<AllBouquet />} />
         <Route path="/Valentine-bouquet" element={<ValentinePage />} />
@@ -53,6 +53,8 @@ function App() {
         <Route path="*" element={<ErrorPage />} />
         <Route path="/success" element={<Success />} />
         <Route path="/cancel" element={<Cancel />} />
+      </Routes>
+
       <Footer />
     </div>
   );
