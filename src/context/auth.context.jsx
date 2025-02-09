@@ -1,63 +1,85 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
+// Create the AuthContext
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null); 
-  const [flowers, setFlowers] = useState([]); 
-  const [loading, setLoading] = useState(true); 
+  const [user, setUser] = useState(null); // Current user
+  const [loading, setLoading] = useState(true); // Loading state
+  const [users, setUsers] = useState([]); // Store all users
 
- 
+  // Function to store the user in localStorage
   const storeUserData = (userData) => {
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
   };
 
-
+  // Function to authenticate the user using JWT token from localStorage
   const authenticateUser = () => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) {
-      setUser(storedUser);
+    const storedToken = localStorage.getItem("authToken"); // Get the stored token
+    if (storedToken) {
+      // If a token exists, verify it by making a request to your backend
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/auth/verify`, {
+          headers: { Authorization: `Bearer ${storedToken}` },
+        })
+        .then((response) => {
+          // If token is valid, store user data
+          setUser(response.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error verifying token:", error);
+          setLoading(false);
+          setUser(null);
+        });
+    } else {
+      // If no token exists, set the loading state to false
+      setLoading(false);
+      setUser(null);
     }
   };
 
-  // Function to logout user and clear storage
+  // Function to logout the user
   const logoutUser = () => {
-    localStorage.removeItem("user");
-    setUser(null);
+    localStorage.removeItem("authToken"); // Remove token from localStorage
+    localStorage.removeItem("user"); // Remove user data from localStorage
+    setUser(null); // Clear the user state
   };
 
-  // Fetch flower data from API
+  // Fetch users data (replace with your relevant API URL)
   useEffect(() => {
+    const apiUrl = import.meta.env.VITE_API_URL; // API URL for users data
     axios
-      .get("https://flowerstore-api-json-server.onrender.com/flowers")
+      .get(`${apiUrl}/users`)
       .then((response) => {
-        setFlowers(response.data); 
-        setLoading(false); 
+        setUsers(response.data); // Store users in state
+        setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching flowers:", error);
+        console.error("Error fetching users:", error);
         setLoading(false);
       });
   }, []);
 
+  // Check for user authentication status on initial load
   useEffect(() => {
-    authenticateUser(); // On initial load, check if user data exists in storage
+    authenticateUser();
   }, []);
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        flowers,
+        users, // Providing users data
         loading,
         storeUserData,
         authenticateUser,
         logoutUser,
       }}
     >
-      {children}
+      {children} {/* Render children components */}
     </AuthContext.Provider>
   );
 }

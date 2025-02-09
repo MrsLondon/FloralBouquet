@@ -57,9 +57,10 @@ function App() {
         <Route path="*" element={<ErrorPage />} />
         <Route path="/success" element={<Success />} />
         <Route path="/cancel" element={<Cancel />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/signup" element={<ProtectedRoute isPrivate={false}><SignupPage /></ProtectedRoute>} />
-        <Route path="/login" element={<ProtectedRoute isPrivate={false}><LoginPage /></ProtectedRoute>} />
+
 
       </Routes>
 
