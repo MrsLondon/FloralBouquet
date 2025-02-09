@@ -43,7 +43,7 @@ const SunflowerPage = () => {
               </Link>
               <h3 className="text-2xl font-bold font-[Rosarivo] mt-2">{flower.name}</h3>
               <p className="text-gray-700 mt-2 flex-grow w-70">{flower.description}</p>
-              <p className="text-gray-600 font-semibold mt-1">From: {flower.price}</p>
+              <p className="text-gray-600 font-semibold mt-1">From:€ {flower.price}</p>
             </div>
           ))}
         </div>

@@ -1,15 +1,19 @@
+import { useState, useContext } from 'react'; // Make sure to import useContext
+import { Link } from 'react-router-dom';
+import { CartContext } from '../context/CartContext'; // Make sure CartContext is imported correctly
 import bag from '../assets/bag-2.png';
 import search from '../assets/search-normal.png';
 import user from '../assets/user.png';
-import { useState } from 'react'; 
-import { SearchBar } from './SearchBar'; 
-import { Link } from 'react-router-dom';
 import logo2 from '../assets/logo2.png';
 import Cart from "../pages/Cart"; 
+import { SearchBar } from './SearchBar';
 
 function Navbar({ onClick }) {
   const [showSearch, setShowSearch] = useState(false); 
   const [isCartOpen, setIsCartOpen] = useState(false);
+  
+  // Use useContext to get cartQuantity from CartContext
+  const { cartQuantity } = useContext(CartContext);
 
   return (
     <div className='bg-orange-200 p-4 relative'>
@@ -44,12 +48,23 @@ function Navbar({ onClick }) {
           />
         </Link>
 
-        <img 
-          src={bag} 
-          alt='cart' 
-          onClick={() => setIsCartOpen(!isCartOpen)} 
-          className='cursor-pointer w-6 sm:w-8' 
-        />
+        {/* Cart icon with badge */}
+        <div className="relative">
+          <img 
+            src={bag} 
+            alt='cart' 
+            onClick={() => setIsCartOpen(!isCartOpen)} 
+            className='cursor-pointer w-6 sm:w-8' 
+          />
+
+          {/* Only show the badge if there are items in the cart */}
+          {cartQuantity > 0 && (
+            <div className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              {cartQuantity}
+            </div>
+          )}
+        </div>
+        
       </div>
 
       {showSearch && (  
