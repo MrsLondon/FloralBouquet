@@ -52,7 +52,7 @@ const ValentinePage = () => {
                 {flower.description}
               </p>
               <p className="text-gray-600 font-semibold mt-1">
-                From: {flower.price}
+                From: €{flower.price}
               </p>
             </div>
           ))}

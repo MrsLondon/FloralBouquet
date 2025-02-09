@@ -21,6 +21,7 @@ import { Success, Cancel } from "./pages/FeedbackPages";
 import SignupPage from "./pages/SignupPage"; 
 import LoginPage from "./pages/LoginPage"; 
 import ProtectedRoute from "./components/ProtectedRoutes";
+import CheckoutPage from "./pages/Checkout";
 
 
 import "./App.css";
@@ -56,6 +57,7 @@ function App() {
         <Route path="*" element={<ErrorPage />} />
         <Route path="/success" element={<Success />} />
         <Route path="/cancel" element={<Cancel />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/signup" element={<ProtectedRoute isPrivate={false}><SignupPage /></ProtectedRoute>} />
         <Route path="/login" element={<ProtectedRoute isPrivate={false}><LoginPage /></ProtectedRoute>} />
 

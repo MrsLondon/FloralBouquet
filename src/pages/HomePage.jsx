@@ -53,7 +53,7 @@ const HomePage = () => {
               </h3>
               
               <p className=" text-center text-gray-600 font-semibold mt-1">
-                From: {flower.price}
+                From: €{flower.price}
               </p>
             </div>
           ))}
