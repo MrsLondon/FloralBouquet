@@ -8,9 +8,9 @@ const Footer = () => {
       linkedin: "https://www.linkedin.com/in/sophia-mascardo-1036542b4/",
     },
     {
-      name: "Ayat",
+      name: "Ayat AbuHaj",
       github: "https://github.com/MrsLondon",
-      linkedin: "https://linkedin.com/in/sophia-mascardo-1036542b4/",
+      linkedin: "https://www.linkedin.com/in/ayatabuhaj/",
     },
   ];
 
