@@ -38,7 +38,7 @@ function ProductDetailsPage() {
         <div className="flex flex-col">
           <h1 className="text-4xl font-bold font-[Rosarivo] text-gray-900">{flower.name}</h1>
           <p className="text-gray-700 mt-4">{flower.description}</p>
-          <p className="text-green-600 font-semibold text-3xl mt-4">{flower.price}</p>
+          <p className="text-green-600 font-semibold text-3xl mt-4">€{flower.price}</p>
 
           <div className="flex flex-row items-center gap-4 mt-6">
            <div className="mt-6 flex items-center gap-4 ">
