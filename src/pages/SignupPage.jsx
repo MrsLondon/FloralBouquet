@@ -28,16 +28,15 @@ function SignupPage() {
       },
     };
 
-    const apiUrl = import.meta.env.VITE_API_URL;
-
-    axios
-      .post(`${apiUrl}/users`, requestBody)
+    const API_URL = import.meta.env.VITE_API_URL;
+    console.log("API URL:", API_URL);
+    axios.post(`${API_URL}/users`, requestBody)
       .then(() => {
         navigate("/login");
       })
       .catch((error) => {
-        setErrorMessage("Error occurred while signing up");
-        console.log(error);
+        console.log("Signup error:", error.response?.data || error.message);
+        setErrorMessage(error.response?.data?.message || "Error occurred while signing up");
       });
   };
 

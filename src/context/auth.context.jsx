@@ -24,6 +24,7 @@ export function AuthProvider({ children }) {
         .get(`${process.env.REACT_APP_API_URL}/auth/verify`, {
           headers: { Authorization: `Bearer ${storedToken}` },
         })
+        
         .then((response) => {
           // If token is valid, store user data
           setUser(response.data);
@@ -82,4 +83,6 @@ export function AuthProvider({ children }) {
       {children} {/* Render children components */}
     </AuthContext.Provider>
   );
+  
+
 }
