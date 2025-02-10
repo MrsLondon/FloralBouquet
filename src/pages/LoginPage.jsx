@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -8,6 +8,7 @@ function LoginPage() {
   const [errorMessage, setErrorMessage] = useState(undefined);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   // Fetch users from API
   useEffect(() => {
@@ -36,6 +37,7 @@ function LoginPage() {
       if (user.password === password) {
         // Logic to handle successful login can go here later
         console.log("Login successful");
+        navigate("/account");
       } else {
         setErrorMessage("Password entered is incorrect");
       }

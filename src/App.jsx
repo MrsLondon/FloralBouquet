@@ -22,6 +22,7 @@ import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage"; 
 import ProtectedRoute from "./components/ProtectedRoutes";
 import CheckoutPage from "./pages/Checkout";
+import AccPage from "./pages/AccPage";
 
 
 import "./App.css";
@@ -60,6 +61,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/account" element={<AccPage />} />
 
 
       </Routes>
