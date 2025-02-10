@@ -11,9 +11,8 @@ function LoginPage() {
 
   // Fetch users from API
   useEffect(() => {
-    const apiUrl = import.meta.env.VITE_API_URL;
-    
-    axios.get(`${apiUrl}/users`)
+    const API_URL = import.meta.env.VITE_API_URL;
+    axios.get(`${API_URL}/users`)
       .then((response) => {
         setUsers(response.data);
         setLoading(false);  // Set loading to false after data is fetched
