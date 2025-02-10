@@ -3,13 +3,13 @@ import { CartContext } from "../context/CartContext";
 import { Link } from "react-router-dom";
 
 function CheckoutPage() {
-  const { cartItems, cartSum, cartQuantity, } = useContext(CartContext);
+  const { cartItems, cartSum, cartQuantity, clearCart } = useContext(CartContext);
 
   const handleCheckout = (e) => {
     e.preventDefault();
-    
+     clearCart();
     alert("Thank you for your purchase!");
-    clearCart();
+   
   };
 
   return (
