@@ -9,7 +9,7 @@ export function Success() {
 export function Cancel() {
     return (
         <div className="flex justify-center items-start min-h-screen bg-red-100 pt-20">
-            <h1 className="text-4xl font-semibold text-red-700">Sorry to see you cancelled your Stripe payment!</h1>
+            <h1 className="text-4xl font-semibold text-red-700">sorry to see you cancel your order come back soon!</h1>
         </div>
     );
 }
