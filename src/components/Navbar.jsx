@@ -7,6 +7,8 @@ import user from '../assets/user.png';
 import logo2 from '../assets/logo2.png';
 import Cart from "../pages/Cart"; 
 import { SearchBar } from './SearchBar';
+import { AuthContext  } from '../context/auth.context'
+
 
 function Navbar({ onClick }) {
   const [showSearch, setShowSearch] = useState(false); 
@@ -14,6 +16,8 @@ function Navbar({ onClick }) {
   
   // Use useContext to get cartQuantity from CartContext
   const { cartQuantity } = useContext(CartContext);
+  const { isLoggedIn, user,logOutUser, } = useContext(AuthContext);
+
 
   return (
     <div className='bg-orange-200 p-4 relative'>
@@ -40,14 +44,18 @@ function Navbar({ onClick }) {
         </div>
 
         {/* User icon now links to /signup */}
-        <Link to="/login">
+   {     !isLoggedIn && <Link to="/login"> 
           <img 
             src={user} 
             alt='user' 
             className='cursor-pointer w-6 sm:w-8' 
-          />
-        </Link>
 
+          />
+        </Link>}
+        
+        {isLoggedIn && <> <span> {user.email} </span>  <button onClick={logOutUser}>logout</button> </>}
+        
+       
         {/* Cart icon with badge */}
         <div className="relative">
           <img 
