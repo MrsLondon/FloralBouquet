@@ -20,7 +20,7 @@ import { useState } from "react";
 import { Success, Cancel } from "./pages/FeedbackPages";
 import SignupPage from "./pages/SignupPage"; 
 import LoginPage from "./pages/LoginPage"; 
-import ProtectedRoute from "./components/ProtectedRoutes";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 import CheckoutPage from "./pages/Checkout";
 import AccPage from "./pages/AccPage";
 
@@ -58,7 +58,7 @@ function App() {
         <Route path="*" element={<ErrorPage />} />
         <Route path="/success" element={<Success />} />
         <Route path="/cancel" element={<Cancel />} />
-        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/signup" element={<ProtectedRoutes><SignupPage /></ProtectedRoutes>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/account" element={<AccPage />} />

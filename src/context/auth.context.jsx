@@ -8,6 +8,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null); // Current user
   const [loading, setLoading] = useState(true); // Loading state
   const [users, setUsers] = useState([]); // Store all users
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Function to store the user in localStorage
   const storeUserData = (userData) => {
@@ -16,38 +17,33 @@ export function AuthProvider({ children }) {
   };
 
   // Function to authenticate the user using JWT token from localStorage
-  const authenticateUser = () => {
-    const storedToken = localStorage.getItem("authToken"); // Get the stored token
-    if (storedToken) {
-      // If a token exists, verify it by making a request to your backend
-      axios
-        .get(`${process.env.REACT_APP_API_URL}/auth/verify`, {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        })
-        
-        .then((response) => {
-          // If token is valid, store user data
-          setUser(response.data);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error verifying token:", error);
-          setLoading(false);
-          setUser(null);
-        });
-    } else {
-      // If no token exists, set the loading state to false
-      setLoading(false);
-      setUser(null);
-    }
-  };
-
+  const authenticateUser = () => { 
+    const user = localStorage.getItem('user');
+    
+    if (user) {  // If user exists in the localStorage
+        const parsedUser = JSON.parse(user) // {"email" : "lloyd@test.com"} --> {email: "lloyd@test.com"}
+       // Update state variables        
+        setIsLoggedIn(true);
+        setLoading(false);
+        setUser(parsedUser);        
+      }
+  
+     else {
+      // If user is not available (or is removed)
+        setIsLoggedIn(false);
+        setLoading(false);
+        setUser(null);      
+    }   
+  }
   // Function to logout the user
-  const logoutUser = () => {
-    localStorage.removeItem("authToken"); // Remove token from localStorage
-    localStorage.removeItem("user"); // Remove user data from localStorage
-    setUser(null); // Clear the user state
-  };
+  const removeUser = () => {                
+    localStorage.removeItem("user");
+  }
+ 
+  const logOutUser = () => {                
+    removeUser(); // clear localStorage
+    authenticateUser(); // update state variables accordingly
+  } 
 
   // Fetch users data (replace with your relevant API URL)
   useEffect(() => {
@@ -77,7 +73,8 @@ export function AuthProvider({ children }) {
         loading,
         storeUserData,
         authenticateUser,
-        logoutUser,
+        logOutUser,
+        isLoggedIn
       }}
     >
       {children} {/* Render children components */}
