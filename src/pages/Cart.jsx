@@ -4,7 +4,7 @@ import { Link, useNavigate} from "react-router-dom"; // Import Link for navigati
 
 
 function Cart({ isOpen, onClose }) {
-  const { cartItems, removeFromCart, cartSum, cartQuantity, clearCart } = useContext(CartContext);
+  const { cartItems, removeFromCart, cartSum, cartQuantity } = useContext(CartContext);
   const [total, setTotal] = useState(cartSum);
   const navigate = useNavigate();
   useEffect(() => {
