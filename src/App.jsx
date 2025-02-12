@@ -23,6 +23,7 @@ import LoginPage from "./pages/LoginPage";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import CheckoutPage from "./pages/Checkout";
 import AccPage from "./pages/AccPage";
+import OrderConfirm from "./pages/OrderConfirm";
 
 
 import "./App.css";
@@ -62,6 +63,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/account" element={<AccPage />} />
+        <Route path="/myorder/:orderId" element={<OrderConfirm />} />
+
 
 
       </Routes>

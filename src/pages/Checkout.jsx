@@ -59,7 +59,7 @@ function CheckoutPage() {
       alert("Thank you for your purchase!");
 
  
-      navigate("/success");
+      navigate(`/myorder/${responseData.id}`); // Pass the order ID in the URL
 
     } catch (error) {
  
