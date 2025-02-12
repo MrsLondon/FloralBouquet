@@ -10,20 +10,47 @@ function OrderConfirm() {
 
   const [order, setOrder] = useState(null);
 
-  useEffect(() => {
+//   useEffect(() => {
+//     const fetchOrder = async () => {
+//       try {
+//         const response = await fetch(`https://flowerstore-api-json-server.onrender.com/orders/${orderId}`);
+//         if (!response.ok) throw new Error("Failed to fetch the order");
+
+//         const orderData = await response.json();
+//         setOrder(orderData);
+//       } catch (error) {
+//         console.error("Error fetching order:", error);
+//         alert("Failed to fetch order details. Please try again.");
+//       }
+//     };
+
+//     fetchOrder();
+//   }, [orderId]);
+useEffect(() => {
     const fetchOrder = async () => {
       try {
         const response = await fetch(`https://flowerstore-api-json-server.onrender.com/orders/${orderId}`);
         if (!response.ok) throw new Error("Failed to fetch the order");
-
+  
         const orderData = await response.json();
-        setOrder(orderData);
+  
+        // Clean up the price and totalPrice fields
+        const cleanedOrderData = {
+          ...orderData,
+          items: orderData.items.map(item => ({
+            ...item,
+            price: parseFloat(item.price.replace("€", "")), // Remove "€" and convert to number
+          })),
+          totalPrice: parseFloat(orderData.totalPrice.replace("€", "")), // Remove "€" and convert to number
+        };
+  
+        setOrder(cleanedOrderData);
       } catch (error) {
         console.error("Error fetching order:", error);
         alert("Failed to fetch order details. Please try again.");
       }
     };
-
+  
     fetchOrder();
   }, [orderId]);
 
@@ -79,7 +106,8 @@ function OrderConfirm() {
   };
 
   if (!order) return <p>Loading order details...</p>;
-
+  const totalQuantity = order.items.reduce((acc, item) => acc + item.quantity, 0);
+  const totalSum = order.items.reduce((acc, item) => acc + item.quantity * item.price, 0);
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Order Confirmation</h1>
@@ -98,8 +126,8 @@ function OrderConfirm() {
               </div>
             ))}
             <div className="border-t pt-4">
-              <p className="text-lg font-semibold">Total Items: {cartQuantity}</p>
-              <p className="text-lg font-semibold text-green-600">Total: €{cartSum.toFixed(2)}</p>
+              <p className="text-lg font-semibold">Total Items: {totalQuantity}</p>
+              <p className="text-lg font-semibold text-green-600">Total: €{totalSum.toFixed(2)}</p>
             </div>
           </div>
         </div>

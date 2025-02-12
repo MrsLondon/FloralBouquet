@@ -28,7 +28,7 @@ function CheckoutPage() {
       userId: 1,
       orderDate: new Date().toISOString(),
       items,
-      totalPrice: `€${cartSum}`,
+      totalPrice: `${cartSum}`,
       shippingAddress: {
         fullName,
         address,
@@ -84,7 +84,7 @@ function CheckoutPage() {
                 <div key={item.id} className="flex items-center justify-between border-b pb-4">
                   <img src={item.imageUrl} alt={item.name} className="w-16 h-16 object-cover rounded-lg" />
                   <div>
-                    <h3 className="text-md font-semibold">{item.name}</h3>
+                    <h3 className="text-md w-16 font-semibold">{item.name}</h3>
                     <p className="text-gray-600">Quantity: {item.quantity}</p>
                     <p className="text-black-600 font-semibold">€{(item.quantity * item.price).toFixed(2)}</p>
                   </div>
