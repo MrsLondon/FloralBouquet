@@ -2,14 +2,14 @@ import { useState, useEffect, useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import ConfirmationModal from "../components/ConfirmationModal";
-import { AuthContext } from "../context/auth.context"; // Import AuthContext
+import { AuthContext } from "../context/auth.context"; 
 
 function MyOrders() {
   const { clearCart } = useContext(CartContext);
-  const { user } = useContext(AuthContext); // Access the logged-in user from AuthContext
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
-  const [filteredOrders, setFilteredOrders] = useState([]); // State for filtered orders
+  const [filteredOrders, setFilteredOrders] = useState([]); 
   const [expandedOrderId, setExpandedOrderId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedOrder, setEditedOrder] = useState(null);
@@ -24,15 +24,15 @@ function MyOrders() {
 
         const ordersData = await response.json();
 
-        // Filter orders by the logged-in user's email
+        
         if (user && user.email) {
           const userOrders = ordersData.filter((order) => order.email === user.email);
-          setFilteredOrders(userOrders); // Set filtered orders
+          setFilteredOrders(userOrders); 
         } else {
-          setFilteredOrders([]); // If no user is logged in, show no orders
+          setFilteredOrders([]); 
         }
 
-        setOrders(ordersData); // Optionally keep all orders in state
+        setOrders(ordersData); 
       } catch (error) {
         console.error("Error fetching orders:", error);
         alert("Failed to fetch orders. Please try again.");
@@ -40,7 +40,7 @@ function MyOrders() {
     };
 
     fetchOrders();
-  }, [user]); // Re-fetch orders if the user changes
+  }, [user]); 
 
   const toggleOrderDetails = (orderId) => {
     setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
@@ -103,11 +103,11 @@ function MyOrders() {
 
       if (!response.ok) throw new Error("Failed to cancel the order");
 
-      // Remove the canceled order from the state
+      
       setOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderToCancel));
       setFilteredOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderToCancel));
 
-      // Close the modal and navigate to the homepage
+      
       setIsModalOpen(false);
       navigate("/");
     } catch (error) {
@@ -169,7 +169,6 @@ function MyOrders() {
                 <h3 className="text-lg font-semibold mt-4 mb-2">Shipping Information</h3>
                 {isEditing && editedOrder?.id === order.id ? (
                   <div className="space-y-2">
-                    {/* Input fields for editing shipping information */}
                     <input
                       type="text"
                       value={editedOrder.shippingAddress.fullName}
@@ -184,7 +183,48 @@ function MyOrders() {
                       }
                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                     />
-                    {/* Other input fields... */}
+                    <input
+                      type="text"
+                      value={editedOrder.shippingAddress.address}
+                      onChange={(e) =>
+                        setEditedOrder({
+                          ...editedOrder,
+                          shippingAddress: {
+                            ...editedOrder.shippingAddress,
+                            address: e.target.value,
+                          },
+                        })
+                      }
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                    />
+                    <input
+                      type="text"
+                      value={editedOrder.shippingAddress.city}
+                      onChange={(e) =>
+                        setEditedOrder({
+                          ...editedOrder,
+                          shippingAddress: {
+                            ...editedOrder.shippingAddress,
+                            city: e.target.value,
+                          },
+                        })
+                      }
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                    />
+                    <input
+                      type="text"
+                      value={editedOrder.shippingAddress.zipCode}
+                      onChange={(e) =>
+                        setEditedOrder({
+                          ...editedOrder,
+                          shippingAddress: {
+                            ...editedOrder.shippingAddress,
+                            zipCode: e.target.value,
+                          },
+                        })
+                      }
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                    />
                     <button
                       onClick={handleSaveChanges}
                       className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700"
@@ -197,7 +237,7 @@ function MyOrders() {
                     <p>{order.shippingAddress.fullName}</p>
                     <p>{order.shippingAddress.address}</p>
                     <p>{order.shippingAddress.city}, {order.shippingAddress.zipCode}</p>
-                    <p>Email: {order.email}</p>
+                    
                     <div className="mt-4 space-x-2">
                       <button
                         onClick={() => handleModifyOrder(order)}
@@ -220,7 +260,7 @@ function MyOrders() {
         ))}
       </div>
 
-      {/* Confirmation Modal */}
+      
       <ConfirmationModal
         isOpen={isModalOpen}
         onConfirm={handleConfirmCancel}
