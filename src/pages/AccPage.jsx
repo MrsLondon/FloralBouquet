@@ -81,6 +81,10 @@ const AccountPage = () => {
     }
   };
 
+  const handleViewOrders = () => {
+    navigate("/myorder/:orderId"); // Navigate to the MyOrders page
+  };
+
   if (loading) return <p className="text-center text-gray-500">Loading...</p>;
   if (error) return <p className="text-center text-red-500 font-semibold">{error}</p>;
 
@@ -153,12 +157,20 @@ const AccountPage = () => {
           </form>
         </div>
       )}
-      <button
-        onClick={handleLogout}
-        className="mt-6 w-full bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 transition duration-300"
-      >
-        Logout
-      </button>
+      <div className="flex gap-4 mt-6">
+        <button
+          onClick={handleViewOrders}
+          className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300 w-full"
+        >
+          View Orders
+        </button>
+        <button
+          onClick={handleLogout}
+          className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300 w-full"
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
 };
