@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { AuthContext } from "../context/auth.context"; // Import AuthContext
 
 function SignupPage() {
   const [email, setEmail] = useState("");
@@ -13,6 +14,7 @@ function SignupPage() {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const navigate = useNavigate();
+  const { storeUserData } = useContext(AuthContext); // Use storeUserData from AuthContext
 
   const handleSignupSubmit = (e) => {
     e.preventDefault();
@@ -30,25 +32,40 @@ function SignupPage() {
 
     const API_URL = import.meta.env.VITE_API_URL;
     console.log("API URL:", API_URL);
-    axios.post(`${API_URL}/users`, requestBody)
-      .then(() => {
-        navigate("/login");
+
+    axios
+      .post(`${API_URL}/users`, requestBody)
+      .then((response) => {
+        // Store the user data in localStorage and update the AuthContext state
+        storeUserData(response.data); // Use storeUserData to update the user state
+
+        // Redirect to the home page or account page
+        navigate("/");
       })
       .catch((error) => {
         console.log("Signup error:", error.response?.data || error.message);
-        setErrorMessage(error.response?.data?.message || "Error occurred while signing up");
+        setErrorMessage(
+          error.response?.data?.message || "Error occurred while signing up"
+        );
       });
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-        <h1 className="text-3xl font-semibold text-center text-blue-600 mb-6">Sign Up</h1>
+        <h1 className="text-3xl font-semibold text-center text-blue-600 mb-6">
+          Sign Up
+        </h1>
 
         <form onSubmit={handleSignupSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-            <input 
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
+            <input
               type="email"
               name="email"
               id="email"
@@ -60,8 +77,13 @@ function SignupPage() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-            <input 
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <input
               type="password"
               name="password"
               id="password"
@@ -73,8 +95,13 @@ function SignupPage() {
           </div>
 
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-            <input 
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Name
+            </label>
+            <input
               type="text"
               name="name"
               id="name"
@@ -86,8 +113,13 @@ function SignupPage() {
           </div>
 
           <div>
-            <label htmlFor="houseNumber" className="block text-sm font-medium text-gray-700">House Number</label>
-            <input 
+            <label
+              htmlFor="houseNumber"
+              className="block text-sm font-medium text-gray-700"
+            >
+              House Number
+            </label>
+            <input
               type="text"
               name="houseNumber"
               id="houseNumber"
@@ -98,8 +130,13 @@ function SignupPage() {
           </div>
 
           <div>
-            <label htmlFor="street" className="block text-sm font-medium text-gray-700">Street</label>
-            <input 
+            <label
+              htmlFor="street"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Street
+            </label>
+            <input
               type="text"
               name="street"
               id="street"
@@ -110,8 +147,13 @@ function SignupPage() {
           </div>
 
           <div>
-            <label htmlFor="city" className="block text-sm font-medium text-gray-700">City</label>
-            <input 
+            <label
+              htmlFor="city"
+              className="block text-sm font-medium text-gray-700"
+            >
+              City
+            </label>
+            <input
               type="text"
               name="city"
               id="city"
@@ -122,8 +164,13 @@ function SignupPage() {
           </div>
 
           <div>
-            <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700">Postal Code</label>
-            <input 
+            <label
+              htmlFor="postalCode"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Postal Code
+            </label>
+            <input
               type="text"
               name="postalCode"
               id="postalCode"
@@ -133,7 +180,7 @@ function SignupPage() {
             />
           </div>
 
-          <button 
+          <button
             type="submit"
             className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
           >
@@ -141,10 +188,17 @@ function SignupPage() {
           </button>
         </form>
 
-        {errorMessage && <p className="text-red-500 text-center mt-4">{errorMessage}</p>}
+        {errorMessage && (
+          <p className="text-red-500 text-center mt-4">{errorMessage}</p>
+        )}
 
         <p className="text-center text-gray-600 mt-4">Already have an account?</p>
-        <Link to="/login" className="text-blue-600 hover:underline text-center block mt-2">Login</Link>
+        <Link
+          to="/login"
+          className="text-blue-600 hover:underline text-center block mt-2"
+        >
+          Login
+        </Link>
       </div>
     </div>
   );

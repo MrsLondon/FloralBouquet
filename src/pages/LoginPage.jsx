@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/auth.context"; 
 
 
 function LoginPage() {
@@ -11,6 +12,7 @@ function LoginPage() {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
+  const { storeUserData } = useContext(AuthContext); // Use storeUserData from AuthContext
 
   // Fetch users from API
   useEffect(() => {
@@ -38,10 +40,10 @@ function LoginPage() {
     if (user) {
       if (user.password === password) {
         // Store user data in localStorage
-        localStorage.setItem("user", JSON.stringify(user));
+        storeUserData(user); 
 
         // Redirect to the Account Page
-        navigate("/account");
+        navigate("/");
       } else {
         setErrorMessage("Password entered is incorrect");
       }

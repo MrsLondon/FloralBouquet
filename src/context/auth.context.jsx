@@ -8,42 +8,33 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null); // Current user
   const [loading, setLoading] = useState(true); // Loading state
   const [users, setUsers] = useState([]); // Store all users
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Derive isLoggedIn from the user state
+  const isLoggedIn = !!user; // true if user exists, false otherwise
 
   // Function to store the user in localStorage
   const storeUserData = (userData) => {
     localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
+    setUser(userData); // Update the user state
   };
 
   // Function to authenticate the user using JWT token from localStorage
-  const authenticateUser = () => { 
-    const user = localStorage.getItem('user');
-    
-    if (user) {  // If user exists in the localStorage
-        const parsedUser = JSON.parse(user) // {"email" : "lloyd@test.com"} --> {email: "lloyd@test.com"}
-       // Update state variables        
-        setIsLoggedIn(true);
-        setLoading(false);
-        setUser(parsedUser);        
-      }
-  
-     else {
-      // If user is not available (or is removed)
-        setIsLoggedIn(false);
-        setLoading(false);
-        setUser(null);      
-    }   
-  }
+  const authenticateUser = () => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const parsedUser = JSON.parse(user); // Parse the user data
+      setUser(parsedUser); // Update the user state
+    } else {
+      setUser(null); // Clear the user state
+    }
+    setLoading(false); // Set loading to false
+  };
+
   // Function to logout the user
-  const removeUser = () => {                
-    localStorage.removeItem("user");
-  }
- 
-  const logOutUser = () => {                
-    removeUser(); // clear localStorage
-    authenticateUser(); // update state variables accordingly
-  } 
+  const logOutUser = () => {
+    localStorage.removeItem("user"); // Clear localStorage
+    authenticateUser(); // Re-check authentication status
+  };
 
   // Fetch users data (replace with your relevant API URL)
   useEffect(() => {
@@ -71,15 +62,13 @@ export function AuthProvider({ children }) {
         user,
         users, // Providing users data
         loading,
+        isLoggedIn, // Provide isLoggedIn
         storeUserData,
         authenticateUser,
         logOutUser,
-        isLoggedIn
       }}
     >
       {children} {/* Render children components */}
     </AuthContext.Provider>
   );
-  
-
 }
