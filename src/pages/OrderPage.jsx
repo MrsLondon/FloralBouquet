@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import ConfirmationModal from "../components/ConfirmationModal"; // Import the modal
 
 function MyOrders() {
   const { clearCart } = useContext(CartContext);
@@ -9,6 +10,10 @@ function MyOrders() {
   const [expandedOrderId, setExpandedOrderId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedOrder, setEditedOrder] = useState(null);
+
+  // State for the modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [orderToCancel, setOrderToCancel] = useState(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -65,10 +70,19 @@ function MyOrders() {
     }
   };
 
-  const handleCancelOrder = async (orderId) => {
+  // Open the modal when the user clicks "Cancel Order"
+  const handleCancelOrderClick = (orderId) => {
+    setOrderToCancel(orderId);
+    setIsModalOpen(true);
+  };
+
+  // Handle confirmation from the modal
+  const handleConfirmCancel = async () => {
+    if (!orderToCancel) return;
+
     try {
       const response = await fetch(
-        `https://flowerstore-api-json-server.onrender.com/orders/${orderId}`,
+        `https://flowerstore-api-json-server.onrender.com/orders/${orderToCancel}`,
         {
           method: "DELETE",
         }
@@ -76,12 +90,22 @@ function MyOrders() {
 
       if (!response.ok) throw new Error("Failed to cancel the order");
 
-      setOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderId));
-      alert("Order canceled successfully!");
+      // Remove the canceled order from the state
+      setOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderToCancel));
+
+      // Close the modal and navigate to the homepage
+      setIsModalOpen(false);
+      navigate("/");
     } catch (error) {
       console.error("Error canceling order:", error);
       alert("Failed to cancel the order. Please try again.");
     }
+  };
+
+  // Handle cancellation from the modal
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setOrderToCancel(null);
   };
 
   const handleInputChange = (e, field) => {
@@ -104,7 +128,7 @@ function MyOrders() {
               <div>
                 <h2 className="text-xl font-semibold">Order #{order.id}</h2>
                 <p className="text-gray-600">Date: {new Date(order.orderDate).toLocaleDateString()}</p>
-                <p className="text-gray-600">Total: €{order.totalPrice}</p>
+                <p className="text-gray-600">Total: €{parseFloat(order.totalPrice).toFixed(2)}</p>
               </div>
               <button
                 onClick={() => toggleOrderDetails(order.id)}
@@ -123,7 +147,7 @@ function MyOrders() {
                       <div>
                         <h4 className="text-md font-semibold">{item.name}</h4>
                         <p className="text-gray-600">Quantity: {item.quantity}</p>
-                        <p className="text-black-600 font-semibold">€{(item.quantity * item.price).toFixed(2)}</p>
+                        <p className="text-black-600 font-semibold">€{(item.quantity * parseFloat(item.price)).toFixed(2)}</p>
                       </div>
                     </div>
                   ))}
@@ -209,7 +233,7 @@ function MyOrders() {
                         Modify Order
                       </button>
                       <button
-                        onClick={() => handleCancelOrder(order.id)}
+                        onClick={() => handleCancelOrderClick(order.id)}
                         className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700"
                       >
                         Cancel Order
@@ -222,6 +246,14 @@ function MyOrders() {
           </div>
         ))}
       </div>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onConfirm={handleConfirmCancel}
+        onCancel={handleCancel}
+        message="Are you sure you want to cancel the order?"
+      />
     </div>
   );
 }
