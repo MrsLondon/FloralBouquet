@@ -4,12 +4,14 @@ import axios from "axios";
 import Background from "../assets/footer.jpg";
 import Footer from "../components/Footer";
 import { FlowerContext } from "../context/FlowerContext";
+import { AuthContext } from "../context/auth.context";
 
 const HomePage = () => {
   
   const { flowers } = useContext(FlowerContext);
   const { filteredFlowers } = useContext(FlowerContext);
   const [ randomFlowers, setRandomFlowers ] = useState([]);
+  const { user, logOutUser } = useContext(AuthContext);
 
   const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -30,12 +32,16 @@ const HomePage = () => {
   const limitedResults = results.slice(0, 12);
 
   return (
+
+    
+    
     <div className="min-h-screen p-6 bg-white-100 ">
       <h1 className="text-3xl font-bold text-center mb-6"> BEST SELLERS</h1>
       <p className=" text-center text-lg text-gray-700 leading-relaxed mb-6">
         {" "}
         Limited offers, Get them before we sold out!!!
       </p>
+
 
       {limitedResults.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 justify-items-center pt-10">

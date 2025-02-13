@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/auth.context";
 
 const AccountPage = () => {
   const [user, setUser] = useState(null);
@@ -18,6 +19,7 @@ const AccountPage = () => {
     }
   });
   const navigate = useNavigate();
+  const { logOutUser } = useContext(AuthContext); // Access logOutUser from AuthContext
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -47,6 +49,7 @@ const AccountPage = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    logOutUser(); 
     navigate("/login");
   };
 
