@@ -17,7 +17,6 @@ import AllBouquet from "./pages/AllBouquet";
 import Footer from "./components/Footer";
 import { SearchBar } from "./components/SearchBar";
 import { useState } from "react";
-import { Success, Cancel } from "./pages/FeedbackPages";
 import SignupPage from "./pages/SignupPage"; 
 import LoginPage from "./pages/LoginPage"; 
 import ProtectedRoutes from "./components/ProtectedRoutes";
@@ -57,8 +56,6 @@ function App() {
         <Route path="/peony" element={<PeonyPage />} />
         <Route path="/lavender" element={<LavenderPage />} />
         <Route path="*" element={<ErrorPage />} />
-        <Route path="/success" element={<Success />} />
-        <Route path="/cancel" element={<Cancel />} />
         <Route path="/signup" element={<ProtectedRoutes><SignupPage /></ProtectedRoutes>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
