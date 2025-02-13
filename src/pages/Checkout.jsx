@@ -58,7 +58,7 @@ function CheckoutPage() {
 
      
       clearCart();
-      alert("Thank you for your purchase!");
+      
 
  
       navigate(`/myorder/${responseData.id}`); // Pass the order ID in the URL
