@@ -1,20 +1,24 @@
 import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
+import { AuthContext } from "../context/auth.context"; // Import AuthContext
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar"; // Import the Navbar component
 
 function CheckoutPage() {
   const { cartItems, cartSum, cartQuantity, clearCart } = useContext(CartContext);
+  const { user, updateUser } = useContext(AuthContext); // Use AuthContext
   const navigate = useNavigate();
 
-  const [fullName, setFullName] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [zipCode, setZipCode] = useState("");
+  // Pre-fill shipping information with user's account details
+  const [fullName, setFullName] = useState(user?.name || "");
+  const [address, setAddress] = useState(user?.address?.street || "");
+  const [houseNumber, setHouseNumber] = useState(user?.address?.houseNumber || ""); // Add house number
+  const [city, setCity] = useState(user?.address?.city || "");
+  const [zipCode, setZipCode] = useState(user?.address?.postalCode || ""); // Fix typo
   const [cardNumber, setCardNumber] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
   const [cvv, setCvv] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(user?.email || "");
 
   const handleCheckout = async (e) => {
     e.preventDefault();
@@ -27,7 +31,7 @@ function CheckoutPage() {
     }));
 
     const orderData = {
-      userId: 1,
+      userId: user?.id, // Use the user's ID from AuthContext
       email,
       orderDate: new Date().toISOString(),
       items,
@@ -35,11 +39,14 @@ function CheckoutPage() {
       shippingAddress: {
         fullName,
         address,
+        houseNumber, // Include house number
         city,
         zipCode,
       },
       paymentStatus: "paid",
     };
+
+    console.log(orderData);
 
     try {
       const response = await fetch('https://flowerstore-api-json-server.onrender.com/orders', {
@@ -49,6 +56,7 @@ function CheckoutPage() {
         },
         body: JSON.stringify(orderData),
       });
+
       if (!response.ok) {
         throw new Error("Failed to place the order");
       }
@@ -56,9 +64,19 @@ function CheckoutPage() {
       const responseData = await response.json();
       console.log("Order placed successfully:", responseData);
 
+      // Update user's address in AuthContext and localStorage
+      updateUser({
+        ...user,
+        address: {
+          street: address,
+          houseNumber, // Sync house number
+          city,
+          postalCode: zipCode,
+        },
+      });
+
       clearCart();
       navigate(`/myorder/${responseData.id}`);
-
     } catch (error) {
       console.error("Error placing order:", error);
       alert("There was an error processing your order. Please try again.");
@@ -67,7 +85,10 @@ function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Navbar /> {/* Add the Navbar component at the top */}
+      {/* Navbar */}
+      <Navbar />
+
+      {/* Main Content */}
       <div className="container mx-auto p-6 mt-20">
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">Checkout</h1>
 
@@ -139,6 +160,17 @@ function CheckoutPage() {
                   type="text"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
+                  required
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">House Number</label>
+                <input
+                  type="text"
+                  value={houseNumber}
+                  onChange={(e) => setHouseNumber(e.target.value)}
                   required
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 />

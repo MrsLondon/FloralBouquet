@@ -1,20 +1,32 @@
 import { useState, useEffect, useContext } from "react";
 import { CartContext } from "../context/CartContext";
-import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/auth.context"; // Import AuthContext
+import { useNavigate, Link } from "react-router-dom"; // Import Link
 import ConfirmationModal from "../components/ConfirmationModal";
-import { AuthContext } from "../context/auth.context"; 
+import GuestModal from "../components/GuestModal"; // Import GuestModal
+import AlertModal from "../components/AlertModal";
 
 function MyOrders() {
   const { clearCart } = useContext(CartContext);
-  const { user } = useContext(AuthContext);
+  const { user, updateUser } = useContext(AuthContext); // Use AuthContext
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
-  const [filteredOrders, setFilteredOrders] = useState([]); 
+  const [filteredOrders, setFilteredOrders] = useState([]);
   const [expandedOrderId, setExpandedOrderId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedOrder, setEditedOrder] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [orderToCancel, setOrderToCancel] = useState(null);
+  const [isGuestModalOpen, setIsGuestModalOpen] = useState(!user); // Open modal if user is not logged in
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  // Close the Guest Modal if the user logs in
+  useEffect(() => {
+    if (user) {
+      setIsGuestModalOpen(false);
+    }
+  }, [user]);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -23,16 +35,13 @@ function MyOrders() {
         if (!response.ok) throw new Error("Failed to fetch orders");
 
         const ordersData = await response.json();
-
-        
         if (user && user.email) {
           const userOrders = ordersData.filter((order) => order.email === user.email);
-          setFilteredOrders(userOrders); 
+          setFilteredOrders(userOrders);
         } else {
-          setFilteredOrders([]); 
+          setFilteredOrders([]);
         }
-
-        setOrders(ordersData); 
+        setOrders(ordersData);
       } catch (error) {
         console.error("Error fetching orders:", error);
         alert("Failed to fetch orders. Please try again.");
@@ -40,15 +49,25 @@ function MyOrders() {
     };
 
     fetchOrders();
-  }, [user]); 
+  }, [user]);
 
   const toggleOrderDetails = (orderId) => {
     setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
   };
 
   const handleModifyOrder = (order) => {
+    if (!user) {
+      setIsGuestModalOpen(true); // Show the modal if the user is not logged in
+      return;
+    }
     setIsEditing(true);
-    setEditedOrder(order);
+    setEditedOrder({
+      ...order,
+      shippingAddress: {
+        ...order.shippingAddress,
+        houseNumber: order.shippingAddress.houseNumber || "", // Add houseNumber
+      },
+    });
   };
 
   const handleSaveChanges = async () => {
@@ -63,9 +82,9 @@ function MyOrders() {
           body: JSON.stringify(editedOrder),
         }
       );
-
+  
       if (!response.ok) throw new Error("Failed to update the order");
-
+  
       const updatedOrder = await response.json();
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
@@ -77,15 +96,38 @@ function MyOrders() {
           order.id === updatedOrder.id ? updatedOrder : order
         )
       );
+  
+      // Update the user's details in AuthContext if shipping info is modified
+      if (editedOrder.shippingAddress) {
+        const updatedUser = {
+          ...user,
+          name: editedOrder.shippingAddress.fullName, // Update the name
+          address: {
+            ...user.address,
+            street: editedOrder.shippingAddress.address,
+            city: editedOrder.shippingAddress.city,
+            postalCode: editedOrder.shippingAddress.zipCode,
+            houseNumber: editedOrder.shippingAddress.houseNumber,
+          },
+        };
+        updateUser(updatedUser); // Sync changes back to AuthContext
+      }
+  
       setIsEditing(false);
-      alert("Order updated successfully!");
+      setAlertMessage("Order updated successfully!"); // Set success message
+      setIsAlertModalOpen(true); // Show the AlertModal
     } catch (error) {
       console.error("Error updating order:", error);
-      alert("Failed to update the order. Please try again.");
+      setAlertMessage("Failed to update the order. Please try again."); // Set error message
+      setIsAlertModalOpen(true); // Show the AlertModal
     }
   };
 
   const handleCancelOrderClick = (orderId) => {
+    if (!user) {
+      setIsGuestModalOpen(true); // Show the modal if the user is not logged in
+      return;
+    }
     setOrderToCancel(orderId);
     setIsModalOpen(true);
   };
@@ -103,11 +145,9 @@ function MyOrders() {
 
       if (!response.ok) throw new Error("Failed to cancel the order");
 
-      
       setOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderToCancel));
       setFilteredOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderToCancel));
 
-      
       setIsModalOpen(false);
       navigate("/");
     } catch (error) {
@@ -133,6 +173,23 @@ function MyOrders() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">My Orders</h1>
+
+      <AlertModal
+      isOpen={isAlertModalOpen}
+      onClose={() => setIsAlertModalOpen(false)}
+      message={alertMessage}
+    />
+
+      {/* Guest Modal for Not Logged In Users */}
+      <GuestModal isOpen={isGuestModalOpen} onClose={() => setIsGuestModalOpen(false)}>
+        <p className="text-lg font-semibold text-gray-800">
+          Please{" "}
+          <Link to={`/login?redirect=${encodeURIComponent(window.location.pathname)}`} className="text-blue-500 hover:underline">
+            sign in
+          </Link>{" "}
+          to view your orders.
+        </p>
+      </GuestModal>
 
       <div className="space-y-4">
         {filteredOrders.map((order) => (
@@ -197,6 +254,21 @@ function MyOrders() {
                       }
                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                     />
+                      <input
+                       type="text"
+                       value={editedOrder.shippingAddress.houseNumber}
+                       onChange={(e) =>
+                       setEditedOrder({
+                        ...editedOrder,
+                          shippingAddress: {
+                           ...editedOrder.shippingAddress,
+                              houseNumber: e.target.value,
+                           },
+                        })
+                    }
+                     placeholder="House Number"
+                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                     />
                     <input
                       type="text"
                       value={editedOrder.shippingAddress.city}
@@ -234,10 +306,11 @@ function MyOrders() {
                   </div>
                 ) : (
                   <div>
-                    <p>{order.shippingAddress.fullName}</p>
-                    <p>{order.shippingAddress.address}</p>
-                    <p>{order.shippingAddress.city}, {order.shippingAddress.zipCode}</p>
-                    
+                    <p>Name: {order.shippingAddress.fullName}</p>
+                    <p>Street: {order.shippingAddress.address}</p>
+                    <p>House Number: {order.shippingAddress.houseNumber}</p>
+                    <p>City: {order.shippingAddress.city}</p>
+                    <p>Postcode: {order.shippingAddress.zipCode}</p>
                     <div className="mt-4 space-x-2">
                       <button
                         onClick={() => handleModifyOrder(order)}
@@ -260,7 +333,6 @@ function MyOrders() {
         ))}
       </div>
 
-      
       <ConfirmationModal
         isOpen={isModalOpen}
         onConfirm={handleConfirmCancel}
