@@ -1,7 +1,8 @@
 import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import { AuthContext } from "../context/auth.context"; // Import AuthContext
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar"; // Import the Navbar component
 
 function CheckoutPage() {
   const { cartItems, cartSum, cartQuantity, clearCart } = useContext(CartContext);
@@ -15,7 +16,7 @@ function CheckoutPage() {
   const [city, setCity] = useState(user?.address?.city || "");
   const [zipCode, setZipCode] = useState(user?.address?.postalCode || ""); // Fix typo
   const [cardNumber, setCardNumber] = useState("");
-  const [expirationDate, setExpirationDate] = useState(""); // Fix typo
+  const [expirationDate, setExpirationDate] = useState("");
   const [cvv, setCvv] = useState("");
   const [email, setEmail] = useState(user?.email || "");
 
@@ -83,136 +84,167 @@ function CheckoutPage() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Checkout</h1>
+    <div className="min-h-screen bg-gray-100">
+      {/* Navbar */}
+      <Navbar />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-          {cartItems.length === 0 ? (
-            <p className="text-gray-500">Your cart is empty.</p>
-          ) : (
-            <div className="space-y-4">
-              {cartItems.map((item) => (
-                <div key={item.id} className="flex items-center justify-between border-b pb-4">
-                  <img src={item.imageUrl} alt={item.name} className="w-16 h-16 object-cover rounded-lg" />
-                  <div>
-                    <h3 className="text-md w-16 font-semibold">{item.name}</h3>
-                    <p className="text-gray-600">Quantity: {item.quantity}</p>
-                    <p className="text-black-600 font-semibold">€{(item.quantity * item.price).toFixed(2)}</p>
+      {/* Main Content */}
+      <div className="container mx-auto p-6 mt-20">
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">Checkout</h1>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white p-8 rounded-lg shadow-md">
+          {/* Order Summary Section */}
+          <div>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Order Summary</h2>
+            {cartItems.length === 0 ? (
+              <p className="text-gray-500 text-center">Your cart is empty.</p>
+            ) : (
+              <div className="space-y-6">
+                {cartItems.map((item) => (
+                  <div key={item.id} className="flex items-center justify-between border-b pb-4">
+                    <img
+                      src={item.imageUrl}
+                      alt={item.name}
+                      className="w-20 h-20 object-cover rounded-lg"
+                    />
+                    <div className="ml-4 flex-1">
+                      <h3 className="text-lg font-semibold text-gray-800">{item.name}</h3>
+                      <p className="text-gray-600">Quantity: {item.quantity}</p>
+                      <p className="text-lg font-semibold text-green-600">
+                        €{(item.quantity * item.price).toFixed(2)}
+                      </p>
+                    </div>
                   </div>
+                ))}
+                <div className="border-t pt-6">
+                  <p className="text-xl font-semibold text-gray-800">Total Items: {cartQuantity}</p>
+                  <p className="text-2xl font-bold text-green-600 mt-2">
+                    Total: €{cartSum.toFixed(2)}
+                  </p>
                 </div>
-              ))}
-              <div className="border-t pt-4">
-                <p className="text-lg font-semibold">Total Items: {cartQuantity}</p>
-                <p className="text-lg font-semibold text-green-600">Total: €{cartSum.toFixed(2)}</p>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
-        <div>
-          <h2 className="text-xl font-semibold mb-4">Shipping & Payment Information</h2>
-          <form onSubmit={handleCheckout} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Full Name</label>
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Address</label>
-              <input
-                type="text"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                required
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">House Number</label>
-              <input
-                type="text"
-                value={houseNumber}
-                onChange={(e) => setHouseNumber(e.target.value)}
-                required
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">City</label>
-              <input
-                type="text"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                required
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Zip Code</label>
-              <input
-                type="text"
-                value={zipCode}
-                onChange={(e) => setZipCode(e.target.value)}
-                required
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Card Number</label>
-              <input
-                type="text"
-                value={cardNumber}
-                onChange={(e) => setCardNumber(e.target.value)}
-                required
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
+          {/* Shipping & Payment Information Section */}
+          <div>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+              Shipping & Payment Information
+            </h2>
+            <form onSubmit={handleCheckout} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Expiration Date</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                 <input
                   type="text"
-                  value={expirationDate}
-                  onChange={(e) => setExpirationDate(e.target.value)}
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
                   required
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
               </div>
+
               <div>
-                <label className="block text-sm font-medium text-gray-700">CVV</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
                 <input
                   type="text"
-                  value={cvv}
-                  onChange={(e) => setCvv(e.target.value)}
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                   required
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
               </div>
-            </div>
-            <button
-              type="submit"
-              className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700"
-            >
-              Place Order
-            </button>
-          </form>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">House Number</label>
+                <input
+                  type="text"
+                  value={houseNumber}
+                  onChange={(e) => setHouseNumber(e.target.value)}
+                  required
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
+                  <input
+                    type="text"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    required
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Zip Code</label>
+                  <input
+                    type="text"
+                    value={zipCode}
+                    onChange={(e) => setZipCode(e.target.value)}
+                    required
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Card Number</label>
+                <input
+                  type="text"
+                  value={cardNumber}
+                  onChange={(e) => setCardNumber(e.target.value)}
+                  required
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Expiration Date
+                  </label>
+                  <input
+                    type="text"
+                    value={expirationDate}
+                    onChange={(e) => setExpirationDate(e.target.value)}
+                    required
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">CVV</label>
+                  <input
+                    type="text"
+                    value={cvv}
+                    onChange={(e) => setCvv(e.target.value)}
+                    required
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                Place Order
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
