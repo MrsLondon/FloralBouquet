@@ -19,7 +19,7 @@ const AccountPage = () => {
     }
   });
   const navigate = useNavigate();
-  const { logOutUser } = useContext(AuthContext); // Access logOutUser from AuthContext
+  const { logOutUser, updateUser } = useContext(AuthContext); // Destructure updateUser from AuthContext
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -57,10 +57,10 @@ const AccountPage = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `https://flowerstore-api-json-server.onrender.com/users/${user.id}`, 
+        `https://flowerstore-api-json-server.onrender.com/users/${user.id}`,
         updatedUser
       );
-      setUser(response.data);
+      updateUser(response.data); // Use updateUser here
       localStorage.setItem("user", JSON.stringify(response.data));
       alert("User information updated successfully!");
     } catch (error) {
@@ -75,6 +75,7 @@ const AccountPage = () => {
       try {
         await axios.delete(`https://flowerstore-api-json-server.onrender.com/users/${user.id}`);
         localStorage.removeItem("user");
+        updateUser(null); // Clear the global user context
         navigate("/login");
         alert("Account deleted successfully.");
       } catch (error) {
