@@ -5,10 +5,11 @@ import Background from "../assets/footer.jpg";
 import Footer from "../components/Footer";
 import { FlowerContext } from "../context/FlowerContext";
 import { AuthContext } from "../context/auth.context";
+import { useSearch } from "../context/SearchContext"; // Import the useSearch hook
 
 const HomePage = () => {
   const { flowers } = useContext(FlowerContext);
-  const { filteredFlowers } = useContext(FlowerContext);
+  const { filteredFlowers } = useSearch(); // Use filteredFlowers from SearchContext
   const [randomFlowers, setRandomFlowers] = useState([]);
   const { user, logOutUser } = useContext(AuthContext);
 

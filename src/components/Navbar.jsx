@@ -1,4 +1,4 @@
-import { useState, useContext, useRef, useEffect } from 'react'; // Add useRef and useEffect
+import { useState, useContext, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/auth.context';
@@ -8,12 +8,13 @@ import userIcon from '../assets/user.png';
 import logo2 from '../assets/logo2.png';
 import Cart from "../pages/Cart";
 import { SearchBar } from './SearchBar';
+import { useSearch } from '../context/SearchContext'; // Import the useSearch hook
 
 function Navbar({ onClick }) {
-  const [showSearch, setShowSearch] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { cartQuantity } = useContext(CartContext);
   const { isLoggedIn, user } = useContext(AuthContext);
+  const { showResults, setShowResults } = useSearch(); // Use the global search context
 
   // Ref for the search bar container
   const searchBarRef = useRef(null);
@@ -22,7 +23,7 @@ function Navbar({ onClick }) {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
-        setShowSearch(false); // Close the search bar
+        setShowResults(false); // Hide search results when clicking outside
       }
     };
 
@@ -33,7 +34,7 @@ function Navbar({ onClick }) {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [setShowResults]);
 
   return (
     <div className='bg-orange-200 p-4 relative'>
@@ -55,7 +56,7 @@ function Navbar({ onClick }) {
         <img 
           src={search} 
           alt='search' 
-          onClick={() => setShowSearch(!showSearch)} 
+          onClick={() => setShowResults(!showResults)} // Toggle search results visibility
           className='cursor-pointer w-6 sm:w-7 md:w-8' 
         />
 
@@ -87,9 +88,9 @@ function Navbar({ onClick }) {
       </div>
 
       {/* Search Bar */}
-      {showSearch && (  
+      {showResults && (  
         <div ref={searchBarRef} className="absolute right-4 sm:right-8 md:right-10 top-16 shadow-md rounded-lg p-2 w-64 sm:w-80 md:w-96 z-50">
-          <SearchBar onResultClick={() => setShowSearch(false)} />  
+          <SearchBar onResultClick={() => setShowResults(false)} />  
         </div>
       )}
 

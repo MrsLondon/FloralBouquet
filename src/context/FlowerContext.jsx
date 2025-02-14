@@ -6,7 +6,6 @@ export const FlowerContext = createContext();
 
 export const FlowerProvider = ({ children }) => {
   const [flowers, setFlowers] = useState([]);
-  const [filteredFlowers, setFilteredFlowers] = useState([]);
  
   useEffect(() => {
     axios
@@ -17,11 +16,8 @@ export const FlowerProvider = ({ children }) => {
 
 
   return (
-    <FlowerContext.Provider
-      value={{ flowers, filteredFlowers, setFilteredFlowers }}
-    >
+    <FlowerContext.Provider value={{ flowers }}>
       {children}
     </FlowerContext.Provider>
   );
 };
-
