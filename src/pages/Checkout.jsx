@@ -3,26 +3,25 @@ import { CartContext } from "../context/CartContext";
 import { AuthContext } from "../context/auth.context"; // Import AuthContext
 import { Link, useNavigate } from "react-router-dom";
 
-
 function CheckoutPage() {
   const { cartItems, cartSum, cartQuantity, clearCart } = useContext(CartContext);
-  const { user } = useContext(AuthContext); // Use AuthContext
+  const { user, updateUser } = useContext(AuthContext); // Use AuthContext
   const navigate = useNavigate();
-  
 
   // Pre-fill shipping information with user's account details
   const [fullName, setFullName] = useState(user?.name || "");
   const [address, setAddress] = useState(user?.address?.street || "");
+  const [houseNumber, setHouseNumber] = useState(user?.address?.houseNumber || ""); // Add house number
   const [city, setCity] = useState(user?.address?.city || "");
-  const [zipCode, setZipCode] = useState(user?.address?.postalCode || "");
+  const [zipCode, setZipCode] = useState(user?.address?.postalCode || ""); // Fix typo
   const [cardNumber, setCardNumber] = useState("");
-  const [expirationDate, setExpirationDate] = useState("");
+  const [expirationDate, setExpirationDate] = useState(""); // Fix typo
   const [cvv, setCvv] = useState("");
   const [email, setEmail] = useState(user?.email || "");
 
   const handleCheckout = async (e) => {
     e.preventDefault();
-   
+
     const items = cartItems.map((item) => ({
       productId: item.id,
       name: item.name,
@@ -39,6 +38,7 @@ function CheckoutPage() {
       shippingAddress: {
         fullName,
         address,
+        houseNumber, // Include house number
         city,
         zipCode,
       },
@@ -63,6 +63,17 @@ function CheckoutPage() {
       const responseData = await response.json();
       console.log("Order placed successfully:", responseData);
 
+      // Update user's address in AuthContext and localStorage
+      updateUser({
+        ...user,
+        address: {
+          street: address,
+          houseNumber, // Sync house number
+          city,
+          postalCode: zipCode,
+        },
+      });
+
       clearCart();
       navigate(`/myorder/${responseData.id}`);
     } catch (error) {
@@ -74,7 +85,6 @@ function CheckoutPage() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Checkout</h1>
-     
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
@@ -130,6 +140,16 @@ function CheckoutPage() {
                 type="text"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
+                required
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">House Number</label>
+              <input
+                type="text"
+                value={houseNumber}
+                onChange={(e) => setHouseNumber(e.target.value)}
                 required
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               />

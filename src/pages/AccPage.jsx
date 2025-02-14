@@ -2,12 +2,15 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
+import AlertModal from "../components/AlertModal";
 
 const AccountPage = () => {
   const [user, setUser] = useState(null);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [updatedUser, setUpdatedUser] = useState({
     name: "",
     email: "",
@@ -62,13 +65,14 @@ const AccountPage = () => {
       );
       updateUser(response.data); // Use updateUser here
       localStorage.setItem("user", JSON.stringify(response.data));
-      alert("User information updated successfully!");
+      setAlertMessage("User information updated successfully!"); // Set success message
+      setIsAlertModalOpen(true); // Show the AlertModal
     } catch (error) {
       console.error("Error updating user:", error);
-      setError("Failed to update user information. Please try again later.");
+      setAlertMessage("Failed to update user information. Please try again later."); // Set error message
+      setIsAlertModalOpen(true); // Show the AlertModal
     }
   };
-
   const handleDelete = async () => {
     const confirmDelete = window.confirm("Are you sure you want to delete your account?");
     if (confirmDelete) {
@@ -95,6 +99,12 @@ const AccountPage = () => {
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-10">
       <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">Account Details</h1>
+
+      <AlertModal
+      isOpen={isAlertModalOpen}
+      onClose={() => setIsAlertModalOpen(false)}
+      message={alertMessage}
+    /> 
       {user && (
         <div className="bg-gray-100 p-4 rounded-lg">
           <form onSubmit={handleUpdate}>

@@ -4,6 +4,7 @@ import { AuthContext } from "../context/auth.context"; // Import AuthContext
 import { useNavigate, Link } from "react-router-dom"; // Import Link
 import ConfirmationModal from "../components/ConfirmationModal";
 import GuestModal from "../components/GuestModal"; // Import GuestModal
+import AlertModal from "../components/AlertModal";
 
 function MyOrders() {
   const { clearCart } = useContext(CartContext);
@@ -17,6 +18,8 @@ function MyOrders() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [orderToCancel, setOrderToCancel] = useState(null);
   const [isGuestModalOpen, setIsGuestModalOpen] = useState(!user); // Open modal if user is not logged in
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   // Close the Guest Modal if the user logs in
   useEffect(() => {
@@ -58,7 +61,13 @@ function MyOrders() {
       return;
     }
     setIsEditing(true);
-    setEditedOrder(order);
+    setEditedOrder({
+      ...order,
+      shippingAddress: {
+        ...order.shippingAddress,
+        houseNumber: order.shippingAddress.houseNumber || "", // Add houseNumber
+      },
+    });
   };
 
   const handleSaveChanges = async () => {
@@ -73,9 +82,9 @@ function MyOrders() {
           body: JSON.stringify(editedOrder),
         }
       );
-
+  
       if (!response.ok) throw new Error("Failed to update the order");
-
+  
       const updatedOrder = await response.json();
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
@@ -87,7 +96,7 @@ function MyOrders() {
           order.id === updatedOrder.id ? updatedOrder : order
         )
       );
-
+  
       // Update the user's details in AuthContext if shipping info is modified
       if (editedOrder.shippingAddress) {
         const updatedUser = {
@@ -98,16 +107,19 @@ function MyOrders() {
             street: editedOrder.shippingAddress.address,
             city: editedOrder.shippingAddress.city,
             postalCode: editedOrder.shippingAddress.zipCode,
+            houseNumber: editedOrder.shippingAddress.houseNumber,
           },
         };
         updateUser(updatedUser); // Sync changes back to AuthContext
       }
-
+  
       setIsEditing(false);
-      alert("Order updated successfully!");
+      setAlertMessage("Order updated successfully!"); // Set success message
+      setIsAlertModalOpen(true); // Show the AlertModal
     } catch (error) {
       console.error("Error updating order:", error);
-      alert("Failed to update the order. Please try again.");
+      setAlertMessage("Failed to update the order. Please try again."); // Set error message
+      setIsAlertModalOpen(true); // Show the AlertModal
     }
   };
 
@@ -161,6 +173,12 @@ function MyOrders() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">My Orders</h1>
+
+      <AlertModal
+      isOpen={isAlertModalOpen}
+      onClose={() => setIsAlertModalOpen(false)}
+      message={alertMessage}
+    />
 
       {/* Guest Modal for Not Logged In Users */}
       <GuestModal isOpen={isGuestModalOpen} onClose={() => setIsGuestModalOpen(false)}>
@@ -236,6 +254,21 @@ function MyOrders() {
                       }
                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                     />
+                      <input
+                       type="text"
+                       value={editedOrder.shippingAddress.houseNumber}
+                       onChange={(e) =>
+                       setEditedOrder({
+                        ...editedOrder,
+                          shippingAddress: {
+                           ...editedOrder.shippingAddress,
+                              houseNumber: e.target.value,
+                           },
+                        })
+                    }
+                     placeholder="House Number"
+                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                     />
                     <input
                       type="text"
                       value={editedOrder.shippingAddress.city}
@@ -275,6 +308,7 @@ function MyOrders() {
                   <div>
                     <p>Name: {order.shippingAddress.fullName}</p>
                     <p>Street: {order.shippingAddress.address}</p>
+                    <p>House Number: {order.shippingAddress.houseNumber}</p>
                     <p>City: {order.shippingAddress.city}</p>
                     <p>Postcode: {order.shippingAddress.zipCode}</p>
                     <div className="mt-4 space-x-2">
