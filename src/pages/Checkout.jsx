@@ -1,32 +1,37 @@
 import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
-import { Link,  useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/auth.context"; // Import AuthContext
+import { Link, useNavigate } from "react-router-dom";
+
 
 function CheckoutPage() {
   const { cartItems, cartSum, cartQuantity, clearCart } = useContext(CartContext);
-  const navigate =  useNavigate();
+  const { user } = useContext(AuthContext); // Use AuthContext
+  const navigate = useNavigate();
+  
 
-  const [fullName, setFullName] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [zipCode, setZipCode] = useState("");
+  // Pre-fill shipping information with user's account details
+  const [fullName, setFullName] = useState(user?.name || "");
+  const [address, setAddress] = useState(user?.address?.street || "");
+  const [city, setCity] = useState(user?.address?.city || "");
+  const [zipCode, setZipCode] = useState(user?.address?.postalCode || "");
   const [cardNumber, setCardNumber] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
   const [cvv, setCvv] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(user?.email || "");
 
   const handleCheckout = async (e) => {
     e.preventDefault();
-
+   
     const items = cartItems.map((item) => ({
       productId: item.id,
       name: item.name,
-      quantity: item.quantity, // Ensure this is a number
-      price: item.price, // Ensure this is a number (remove the "€" symbol)
+      quantity: item.quantity,
+      price: item.price,
     }));
 
     const orderData = {
-      userId: 1,
+      userId: user?.id, // Use the user's ID from AuthContext
       email,
       orderDate: new Date().toISOString(),
       items,
@@ -39,7 +44,9 @@ function CheckoutPage() {
       },
       paymentStatus: "paid",
     };
-  console.log(orderData);
+
+    console.log(orderData);
+
     try {
       const response = await fetch('https://flowerstore-api-json-server.onrender.com/orders', {
         method: "POST",
@@ -48,23 +55,17 @@ function CheckoutPage() {
         },
         body: JSON.stringify(orderData),
       });
+
       if (!response.ok) {
         throw new Error("Failed to place the order");
       }
 
-     
       const responseData = await response.json();
       console.log("Order placed successfully:", responseData);
 
-     
       clearCart();
-      
-
- 
-      navigate(`/myorder/${responseData.id}`); // Pass the order ID in the URL
-
+      navigate(`/myorder/${responseData.id}`);
     } catch (error) {
- 
       console.error("Error placing order:", error);
       alert("There was an error processing your order. Please try again.");
     }
@@ -73,9 +74,9 @@ function CheckoutPage() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Checkout</h1>
+     
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        
         <div>
           <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
           {cartItems.length === 0 ? (
@@ -113,17 +114,16 @@ function CheckoutPage() {
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               />
             </div>
-                  <div>
-                  <label className="block text-sm font-medium text-gray-700">Email</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                  />
-                </div>
-
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              />
+            </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">Address</label>
               <input
@@ -134,7 +134,6 @@ function CheckoutPage() {
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700">City</label>
               <input
@@ -145,7 +144,6 @@ function CheckoutPage() {
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700">Zip Code</label>
               <input
@@ -156,7 +154,6 @@ function CheckoutPage() {
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700">Card Number</label>
               <input
@@ -167,7 +164,6 @@ function CheckoutPage() {
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               />
             </div>
-
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">Expiration Date</label>
@@ -179,7 +175,6 @@ function CheckoutPage() {
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700">CVV</label>
                 <input
@@ -191,7 +186,6 @@ function CheckoutPage() {
                 />
               </div>
             </div>
-
             <button
               type="submit"
               className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700"

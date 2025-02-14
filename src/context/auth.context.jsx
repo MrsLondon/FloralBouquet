@@ -18,6 +18,15 @@ export function AuthProvider({ children }) {
     setUser(userData); // Update the user state
   };
 
+  // Function to update user information
+  const updateUser = (updatedUserData) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      ...updatedUserData,
+    }));
+    localStorage.setItem("user", JSON.stringify({ ...user, ...updatedUserData })); // Update localStorage
+  };
+
   // Function to authenticate the user using JWT token from localStorage
   const authenticateUser = () => {
     const user = localStorage.getItem("user");
@@ -66,6 +75,7 @@ export function AuthProvider({ children }) {
         storeUserData,
         authenticateUser,
         logOutUser,
+        updateUser, // Add the updateUser function
       }}
     >
       {children} {/* Render children components */}
