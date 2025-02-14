@@ -1,5 +1,16 @@
 /* App.css */
 
+
+.cart-sidebar {
+  width: 100%; /* Full width on small screens */
+}
+
+@media (min-width: 640px) {
+  .cart-sidebar {
+    width: 384px; /* Fixed width on larger screens */
+  }
+}
+
 @media (max-width: 640px) {
   .search-bar {
     width: 100% !important;
