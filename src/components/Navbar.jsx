@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useRef, useEffect } from 'react'; // Add useRef and useEffect
 import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/auth.context';
@@ -12,40 +12,59 @@ import { SearchBar } from './SearchBar';
 function Navbar({ onClick }) {
   const [showSearch, setShowSearch] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  
   const { cartQuantity } = useContext(CartContext);
   const { isLoggedIn, user } = useContext(AuthContext);
+
+  // Ref for the search bar container
+  const searchBarRef = useRef(null);
+
+  // Close search bar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
+        setShowSearch(false); // Close the search bar
+      }
+    };
+
+    // Attach the event listener
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Cleanup the event listener
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className='bg-orange-200 p-4 relative'>
       {/* Logo */}
       <Link 
         to="/" 
-        className="absolute left-1/2 transform -translate-x-1/2 text-3xl sm:text-5xl font-bold hover:text-orange-600"
+        className="absolute left-1/2 transform -translate-x-1/2 text-2xl sm:text-4xl md:text-5xl font-bold hover:text-orange-600"
       >
         <div className="flex items-center gap-2">
-          <img src={logo2} alt="FloralBouquet logo" className="w-auto h-12 sm:h-16" />
+          <img src={logo2} alt="FloralBouquet logo" className="w-auto h-10 sm:h-14 md:h-16" />
           <h1>FloralBouquet</h1>
-          <img src={logo2} alt="FloralBouquet logo2" className="w-auto h-12 sm:h-16" />
+          <img src={logo2} alt="FloralBouquet logo2" className="w-auto h-10 sm:h-14 md:h-16" />
         </div>
       </Link>
 
       {/* Icons */}
-      <div className='absolute right-4 sm:right-10 flex gap-3 sm:gap-6'>
+      <div className='absolute right-4 sm:right-8 md:right-10 flex gap-3 sm:gap-5 md:gap-6'>
         {/* Search Icon */}
         <img 
           src={search} 
           alt='search' 
           onClick={() => setShowSearch(!showSearch)} 
-          className='cursor-pointer w-6 sm:w-8' 
+          className='cursor-pointer w-6 sm:w-7 md:w-8' 
         />
 
-        {/* User Icon - Redirects Based on Auth Status */}
+        {/* User Icon */}
         <Link to={isLoggedIn ? "/account" : "/login"}>
           <img 
-            src={user?.photoURL || userIcon} // Use user image or fallback to default
+            src={user?.photoURL || userIcon} 
             alt="user"
-            className="cursor-pointer w-6 sm:w-8"
+            className="cursor-pointer w-6 sm:w-7 md:w-8"
           />
         </Link>
 
@@ -55,7 +74,7 @@ function Navbar({ onClick }) {
             src={bag} 
             alt='cart' 
             onClick={() => setIsCartOpen(!isCartOpen)} 
-            className='cursor-pointer w-6 sm:w-8' 
+            className='cursor-pointer w-6 sm:w-7 md:w-8' 
           />
 
           {/* Cart Badge */}
@@ -69,8 +88,8 @@ function Navbar({ onClick }) {
 
       {/* Search Bar */}
       {showSearch && (  
-        <div className="absolute right-4 sm:right-10 top-16 shadow-md rounded-lg p-2 w-72 sm:w-96 z-50">
-          <SearchBar />  
+        <div ref={searchBarRef} className="absolute right-4 sm:right-8 md:right-10 top-16 shadow-md rounded-lg p-2 w-64 sm:w-80 md:w-96 z-50">
+          <SearchBar onResultClick={() => setShowSearch(false)} />  
         </div>
       )}
 
@@ -78,7 +97,7 @@ function Navbar({ onClick }) {
       <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
       {/* Navbar Links */}
-      <ul className='flex flex-col sm:flex-row justify-center gap-3 sm:gap-5 list-none p-2 text-lg mt-12 sm:mt-16'>
+      <ul className='flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 md:gap-5 list-none p-2 text-lg mt-12 sm:mt-14 md:mt-16'>
         <li><Link to="/AllBouquet" className="hover:text-orange-600">Bouquet</Link></li>
         <li><Link to="/Valentine-bouquet" className="hover:text-orange-600">Valentine's Day</Link></li>
         <li><Link to="/Wedding-bouquet" className="hover:text-orange-600">Wedding</Link></li>
