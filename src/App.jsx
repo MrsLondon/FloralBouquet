@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 import Homepage from "./pages/HomePage";
-import Navbar from "./components/Navbar";
 import ValentinePage from "./pages/ValentinePage";
 import WeddingPage from "./pages/WeddingPage";
 import GiftPage from "./pages/GiftPage";
@@ -24,7 +23,6 @@ import CheckoutPage from "./pages/Checkout";
 import AccPage from "./pages/AccPage";
 import OrderPage from "./pages/OrderPage";
 
-
 import "./App.css";
 
 function App() {
@@ -33,15 +31,13 @@ function App() {
 
   return (
     <div>
-      <Navbar onClick={() => setShowSearch(!showSearch)} />
-
       {/* Search Bar (only shown when 'showSearch' is true) */}
       {showSearch && (
         <div>
           <SearchBar />
         </div>
       )}
-     <Routes>
+      <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/AllBouquet" element={<AllBouquet />} />
         <Route path="/Valentine-bouquet" element={<ValentinePage />} />
@@ -61,9 +57,7 @@ function App() {
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/account" element={<AccPage />} />
         <Route path="/myorder/:orderId" element={<OrderPage />} />
-
       </Routes>
-
       <Footer />
     </div>
   );
