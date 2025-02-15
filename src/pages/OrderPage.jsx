@@ -5,6 +5,7 @@ import { useNavigate, Link } from "react-router-dom"; // Import Link
 import ConfirmationModal from "../components/ConfirmationModal";
 import GuestModal from "../components/GuestModal"; // Import GuestModal
 import AlertModal from "../components/AlertModal";
+import Navbar from "../components/Navbar.jsx"; // Import Navbar
 
 function MyOrders() {
   const { clearCart } = useContext(CartContext);
@@ -82,9 +83,9 @@ function MyOrders() {
           body: JSON.stringify(editedOrder),
         }
       );
-  
+
       if (!response.ok) throw new Error("Failed to update the order");
-  
+
       const updatedOrder = await response.json();
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
@@ -96,7 +97,7 @@ function MyOrders() {
           order.id === updatedOrder.id ? updatedOrder : order
         )
       );
-  
+
       // Update the user's details in AuthContext if shipping info is modified
       if (editedOrder.shippingAddress) {
         const updatedUser = {
@@ -112,7 +113,7 @@ function MyOrders() {
         };
         updateUser(updatedUser); // Sync changes back to AuthContext
       }
-  
+
       setIsEditing(false);
       setAlertMessage("Order updated successfully!"); // Set success message
       setIsAlertModalOpen(true); // Show the AlertModal
@@ -171,174 +172,180 @@ function MyOrders() {
   if (orders.length === 0) return <p>Loading orders...</p>;
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">My Orders</h1>
+    <div className="min-h-screen bg-white-100">
+      {/* Navbar at the top */}
+      <Navbar />
 
-      <AlertModal
-      isOpen={isAlertModalOpen}
-      onClose={() => setIsAlertModalOpen(false)}
-      message={alertMessage}
-    />
+      {/* Main content with padding to avoid overlap */}
+      <div className="container mx-auto p-4 pt-20">
+        <h1 className="text-2xl font-bold mb-4">My Orders</h1>
 
-      {/* Guest Modal for Not Logged In Users */}
-      <GuestModal isOpen={isGuestModalOpen} onClose={() => setIsGuestModalOpen(false)}>
-        <p className="text-lg font-semibold text-gray-800">
-          Please{" "}
-          <Link to={`/login?redirect=${encodeURIComponent(window.location.pathname)}`} className="text-blue-500 hover:underline">
-            sign in
-          </Link>{" "}
-          to view your orders.
-        </p>
-      </GuestModal>
+        <AlertModal
+          isOpen={isAlertModalOpen}
+          onClose={() => setIsAlertModalOpen(false)}
+          message={alertMessage}
+        />
 
-      <div className="space-y-4">
-        {filteredOrders.map((order) => (
-          <div key={order.id} className="border rounded-lg p-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <h2 className="text-xl font-semibold">Order #{order.id}</h2>
-                <p className="text-gray-600">Date: {new Date(order.orderDate).toLocaleDateString()}</p>
-                <p className="text-gray-600">Total: €{parseFloat(order.totalPrice).toFixed(2)}</p>
+        {/* Guest Modal for Not Logged In Users */}
+        <GuestModal isOpen={isGuestModalOpen} onClose={() => setIsGuestModalOpen(false)}>
+          <p className="text-lg font-semibold text-gray-800">
+            Please{" "}
+            <Link to={`/login?redirect=${encodeURIComponent(window.location.pathname)}`} className="text-blue-500 hover:underline">
+              sign in
+            </Link>{" "}
+            to view your orders.
+          </p>
+        </GuestModal>
+
+        <div className="space-y-4">
+          {filteredOrders.map((order) => (
+            <div key={order.id} className="border rounded-lg p-4">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h2 className="text-xl font-semibold">Order #{order.id}</h2>
+                  <p className="text-gray-600">Date: {new Date(order.orderDate).toLocaleDateString()}</p>
+                  <p className="text-gray-600">Total: €{parseFloat(order.totalPrice).toFixed(2)}</p>
+                </div>
+                <button
+                  onClick={() => toggleOrderDetails(order.id)}
+                  className="text-blue-600 hover:text-blue-800"
+                >
+                  {expandedOrderId === order.id ? "Hide Details" : "View Details"}
+                </button>
               </div>
-              <button
-                onClick={() => toggleOrderDetails(order.id)}
-                className="text-blue-600 hover:text-blue-800"
-              >
-                {expandedOrderId === order.id ? "Hide Details" : "View Details"}
-              </button>
-            </div>
 
-            {expandedOrderId === order.id && (
-              <div className="mt-4">
-                <h3 className="text-lg font-semibold mb-2">Items</h3>
-                <div className="space-y-2">
-                  {order.items.map((item) => (
-                    <div key={item.productId} className="flex justify-between border-b pb-2">
-                      <div>
-                        <h4 className="text-md font-semibold">{item.name}</h4>
-                        <p className="text-gray-600">Quantity: {item.quantity}</p>
-                        <p className="text-black-600 font-semibold">€{(item.quantity * parseFloat(item.price)).toFixed(2)}</p>
+              {expandedOrderId === order.id && (
+                <div className="mt-4">
+                  <h3 className="text-lg font-semibold mb-2">Items</h3>
+                  <div className="space-y-2">
+                    {order.items.map((item) => (
+                      <div key={item.productId} className="flex justify-between border-b pb-2">
+                        <div>
+                          <h4 className="text-md font-semibold">{item.name}</h4>
+                          <p className="text-gray-600">Quantity: {item.quantity}</p>
+                          <p className="text-black-600 font-semibold">€{(item.quantity * parseFloat(item.price)).toFixed(2)}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <h3 className="text-lg font-semibold mt-4 mb-2">Shipping Information</h3>
+                  {isEditing && editedOrder?.id === order.id ? (
+                    <div className="space-y-2">
+                      <input
+                        type="text"
+                        value={editedOrder.shippingAddress.fullName}
+                        onChange={(e) =>
+                          setEditedOrder({
+                            ...editedOrder,
+                            shippingAddress: {
+                              ...editedOrder.shippingAddress,
+                              fullName: e.target.value,
+                            },
+                          })
+                        }
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                      />
+                      <input
+                        type="text"
+                        value={editedOrder.shippingAddress.address}
+                        onChange={(e) =>
+                          setEditedOrder({
+                            ...editedOrder,
+                            shippingAddress: {
+                              ...editedOrder.shippingAddress,
+                              address: e.target.value,
+                            },
+                          })
+                        }
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                      />
+                      <input
+                        type="text"
+                        value={editedOrder.shippingAddress.houseNumber}
+                        onChange={(e) =>
+                          setEditedOrder({
+                            ...editedOrder,
+                            shippingAddress: {
+                              ...editedOrder.shippingAddress,
+                              houseNumber: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="House Number"
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                      />
+                      <input
+                        type="text"
+                        value={editedOrder.shippingAddress.city}
+                        onChange={(e) =>
+                          setEditedOrder({
+                            ...editedOrder,
+                            shippingAddress: {
+                              ...editedOrder.shippingAddress,
+                              city: e.target.value,
+                            },
+                          })
+                        }
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                      />
+                      <input
+                        type="text"
+                        value={editedOrder.shippingAddress.zipCode}
+                        onChange={(e) =>
+                          setEditedOrder({
+                            ...editedOrder,
+                            shippingAddress: {
+                              ...editedOrder.shippingAddress,
+                              zipCode: e.target.value,
+                            },
+                          })
+                        }
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                      />
+                      <button
+                        onClick={handleSaveChanges}
+                        className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700"
+                      >
+                        Save Changes
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <p>Name: {order.shippingAddress.fullName}</p>
+                      <p>Street: {order.shippingAddress.address}</p>
+                      <p>House Number: {order.shippingAddress.houseNumber}</p>
+                      <p>City: {order.shippingAddress.city}</p>
+                      <p>Postcode: {order.shippingAddress.zipCode}</p>
+                      <div className="mt-4 space-x-2">
+                        <button
+                          onClick={() => handleModifyOrder(order)}
+                          className="bg-yellow-600 text-white py-2 px-4 rounded-md hover:bg-yellow-700"
+                        >
+                          Modify Order
+                        </button>
+                        <button
+                          onClick={() => handleCancelOrderClick(order.id)}
+                          className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700"
+                        >
+                          Cancel Order
+                        </button>
                       </div>
                     </div>
-                  ))}
+                  )}
                 </div>
+              )}
+            </div>
+          ))}
+        </div>
 
-                <h3 className="text-lg font-semibold mt-4 mb-2">Shipping Information</h3>
-                {isEditing && editedOrder?.id === order.id ? (
-                  <div className="space-y-2">
-                    <input
-                      type="text"
-                      value={editedOrder.shippingAddress.fullName}
-                      onChange={(e) =>
-                        setEditedOrder({
-                          ...editedOrder,
-                          shippingAddress: {
-                            ...editedOrder.shippingAddress,
-                            fullName: e.target.value,
-                          },
-                        })
-                      }
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                    />
-                    <input
-                      type="text"
-                      value={editedOrder.shippingAddress.address}
-                      onChange={(e) =>
-                        setEditedOrder({
-                          ...editedOrder,
-                          shippingAddress: {
-                            ...editedOrder.shippingAddress,
-                            address: e.target.value,
-                          },
-                        })
-                      }
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                    />
-                      <input
-                       type="text"
-                       value={editedOrder.shippingAddress.houseNumber}
-                       onChange={(e) =>
-                       setEditedOrder({
-                        ...editedOrder,
-                          shippingAddress: {
-                           ...editedOrder.shippingAddress,
-                              houseNumber: e.target.value,
-                           },
-                        })
-                    }
-                     placeholder="House Number"
-                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                     />
-                    <input
-                      type="text"
-                      value={editedOrder.shippingAddress.city}
-                      onChange={(e) =>
-                        setEditedOrder({
-                          ...editedOrder,
-                          shippingAddress: {
-                            ...editedOrder.shippingAddress,
-                            city: e.target.value,
-                          },
-                        })
-                      }
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                    />
-                    <input
-                      type="text"
-                      value={editedOrder.shippingAddress.zipCode}
-                      onChange={(e) =>
-                        setEditedOrder({
-                          ...editedOrder,
-                          shippingAddress: {
-                            ...editedOrder.shippingAddress,
-                            zipCode: e.target.value,
-                          },
-                        })
-                      }
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                    />
-                    <button
-                      onClick={handleSaveChanges}
-                      className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700"
-                    >
-                      Save Changes
-                    </button>
-                  </div>
-                ) : (
-                  <div>
-                    <p>Name: {order.shippingAddress.fullName}</p>
-                    <p>Street: {order.shippingAddress.address}</p>
-                    <p>House Number: {order.shippingAddress.houseNumber}</p>
-                    <p>City: {order.shippingAddress.city}</p>
-                    <p>Postcode: {order.shippingAddress.zipCode}</p>
-                    <div className="mt-4 space-x-2">
-                      <button
-                        onClick={() => handleModifyOrder(order)}
-                        className="bg-yellow-600 text-white py-2 px-4 rounded-md hover:bg-yellow-700"
-                      >
-                        Modify Order
-                      </button>
-                      <button
-                        onClick={() => handleCancelOrderClick(order.id)}
-                        className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700"
-                      >
-                        Cancel Order
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        ))}
+        <ConfirmationModal
+          isOpen={isModalOpen}
+          onConfirm={handleConfirmCancel}
+          onCancel={handleCancel}
+          message="Are you sure you want to cancel the order?"
+        />
       </div>
-
-      <ConfirmationModal
-        isOpen={isModalOpen}
-        onConfirm={handleConfirmCancel}
-        onCancel={handleCancel}
-        message="Are you sure you want to cancel the order?"
-      />
     </div>
   );
 }
