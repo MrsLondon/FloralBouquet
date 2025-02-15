@@ -17,16 +17,13 @@ const ValentinePage = () => {
 
       {/* Full-width background image section */}
       <div
-        className="w-full h-48 sm:h-64 md:h-80 lg:h-96 bg-cover bg-center -mt-16" // Responsive height and negative margin
+        className="w-full h-48 sm:h-64 md:h-80 lg:h-96 bg-cover bg-center -mt-16 relative" // Added 'relative' for positioning context
         style={{
           backgroundImage: `url('https://res.cloudinary.com/duu9km8ss/image/upload/v1739559536/valentine1_zharvb.webp')`,
         }}
-      ></div>
-
-      {/* Rest of the content */}
-      <div className="p-6">
-        {/* Improved Links Section */}
-        <div className="flex justify-center gap-4 sm:gap-6 mb-8">
+      >
+        {/* Links Section positioned at the bottom left */}
+        <div className="absolute bottom-4 left-2 flex gap-4 sm:gap-6"> {/* Adjusted left value to move closer to the edge */}
           <Link
             to="/lilies?context=valentine"
             className="bg-white text-orange-600 font-semibold py-2 px-4 sm:px-6 rounded-full shadow-lg hover:bg-orange-600 hover:text-white transition-all duration-300 text-sm sm:text-base"
@@ -46,7 +43,10 @@ const ValentinePage = () => {
             Tulips
           </Link>
         </div>
+      </div>
 
+      {/* Rest of the content */}
+      <div className="p-6">
         {/* Flower Grid */}
         {giftFlowers.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 p-4 justify-items-center">

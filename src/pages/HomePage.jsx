@@ -1,30 +1,30 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 import { Link } from "react-router-dom";
 import Background from "../assets/footer.jpg";
 import Footer from "../components/Footer";
 import { FlowerContext } from "../context/FlowerContext";
 import { AuthContext } from "../context/auth.context";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar.jsx";
 
 const HomePage = () => {
   const { flowers, filteredFlowers } = useContext(FlowerContext);
   const [randomFlowers, setRandomFlowers] = useState([]);
-  const { user } = useContext(AuthContext); // Removed logOutUser if unused
+  const { user } = useContext(AuthContext);
 
-  const shuffleArray = (array) => {
+  const shuffleArray = useMemo(() => (array) => {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
-  };
+  }, []);
 
   useEffect(() => {
     if (flowers.length > 0) {
       const shuffledFlowers = shuffleArray([...flowers]);
       setRandomFlowers(shuffledFlowers);
     }
-  }, [flowers]);
+  }, [flowers, shuffleArray]);
 
   const results = filteredFlowers.length > 0 ? filteredFlowers : randomFlowers;
   const limitedResults = results.slice(0, 12);
@@ -32,20 +32,24 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-white-100">
       {/* Background Image Section */}
-      <div
-        className="w-full h-48 sm:h-64 md:h-80 lg:h-96 bg-cover bg-center"
-        style={{
-          backgroundImage: `url('https://res.cloudinary.com/duu9km8ss/image/upload/v1739568434/pink-white-flowers_605022-24817_lajgy3.avif')`,
-        }}
-      ></div>
+      <div className="w-full h-48 sm:h-64 md:h-80 lg:h-96 bg-cover bg-center relative"
+  style={{
+    backgroundImage: `url('https://res.cloudinary.com/duu9km8ss/image/upload/v1739603796/tender-ranunculus-flowers-trendy-ceramic-260nw-2107689617_bnvena.jpg')`,
+  }}
+  role="img"
+  aria-label="Tender ranunculus flowers background"
+>
+  {/* Navbar positioned even closer to the top */}
+  <div className="absolute inset-x-0 top-[8%] transform -translate-y-1/2 z-50">
+    <Navbar />
+  </div>
+</div>
 
-      {/* Navbar positioned below the background image */}
-      <div className="relative z-50">
-        <Navbar />
-      </div>
 
-      {/* Add space between Navbar and content */}
-      <div className="mt-12"></div> {/* Increased margin-top for more space */}
+
+
+      {/* Add space between background image and content */}
+      <div className="mt-12"></div>
 
       {/* Main Content */}
       <div className="p-6">
@@ -61,15 +65,14 @@ const HomePage = () => {
                   <img
                     src={flower.imageUrl}
                     alt={flower.name}
-                    className="w-full h-64 object-contain" // Use object-contain to avoid cropping
+                    className="w-full h-64 object-contain"
+                    loading="lazy"
                   />
                 </Link>
                 <div className="p-6">
-                  {/* Flower Name with Media Query */}
                   <h3 className="text-xl font-bold text-gray-800 mb-2">
                     {flower.name}
                   </h3>
-                  {/* Flower Price with Media Query */}
                   <p className="text-lg font-semibold text-green-600">
                     From: €{flower.price}
                   </p>
@@ -89,6 +92,7 @@ const HomePage = () => {
             src={Background}
             alt="Flower background"
             className="h-full w-full object-cover absolute inset-0"
+            loading="lazy"
           />
           <div className="absolute inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center p-4">
             <p className="text-center text-sm sm:text-base md:text-lg max-w-2xl text-white leading-relaxed ml-7 mt-5">
