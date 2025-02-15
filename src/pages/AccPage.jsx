@@ -200,7 +200,7 @@ const AccountPage = () => {
             </div>
           )}
 
-          <div className="flex gap-4 mt-6">
+          <div className="flex gap-4 mt-7">
             <button
               onClick={handleViewOrders}
               className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300 w-full shadow-md"
