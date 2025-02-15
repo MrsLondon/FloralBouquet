@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 import AlertModal from "../components/AlertModal";
+import Navbar from "../components/Navbar"; // Import the Navbar component
 
 const AccountPage = () => {
   const [user, setUser] = useState(null);
@@ -18,8 +19,8 @@ const AccountPage = () => {
       houseNumber: "",
       street: "",
       city: "",
-      postalCode: ""
-    }
+      postalCode: "",
+    },
   });
   const navigate = useNavigate();
   const { logOutUser, updateUser } = useContext(AuthContext); // Destructure updateUser from AuthContext
@@ -52,7 +53,7 @@ const AccountPage = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
-    logOutUser(); 
+    logOutUser();
     navigate("/login");
   };
 
@@ -73,6 +74,7 @@ const AccountPage = () => {
       setIsAlertModalOpen(true); // Show the AlertModal
     }
   };
+
   const handleDelete = async () => {
     const confirmDelete = window.confirm("Are you sure you want to delete your account?");
     if (confirmDelete) {
@@ -97,93 +99,122 @@ const AccountPage = () => {
   if (error) return <p className="text-center text-red-500 font-semibold">{error}</p>;
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-10">
-      <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">Account Details</h1>
+    <div className="min-h-screen flex flex-col">
+      {/* Add the Navbar at the top of the page */}
+      <Navbar />
 
-      <AlertModal
-      isOpen={isAlertModalOpen}
-      onClose={() => setIsAlertModalOpen(false)}
-      message={alertMessage}
-    /> 
-      {user && (
-        <div className="bg-gray-100 p-4 rounded-lg">
-          <form onSubmit={handleUpdate}>
-            <p className="text-lg font-semibold text-gray-700">Name</p>
-            <input
-              type="text"
-              value={updatedUser.name}
-              onChange={(e) => setUpdatedUser({ ...updatedUser, name: e.target.value })}
-              className="w-full p-2 mt-2 border rounded-md"
-            />
-            <p className="text-lg font-semibold text-gray-700 mt-4">Email</p>
-            <input
-              type="email"
-              value={updatedUser.email}
-              onChange={(e) => setUpdatedUser({ ...updatedUser, email: e.target.value })}
-              className="w-full p-2 mt-2 border rounded-md"
-            />
-            <h2 className="mt-4 text-xl font-bold text-gray-800">Address</h2>
-            <div className="grid grid-cols-2 gap-4 mt-2">
-              <input
-                type="text"
-                value={updatedUser.address.houseNumber}
-                onChange={(e) => setUpdatedUser({ ...updatedUser, address: { ...updatedUser.address, houseNumber: e.target.value } })}
-                placeholder="House Number"
-                className="p-2 border rounded-md"
-              />
-              <input
-                type="text"
-                value={updatedUser.address.street}
-                onChange={(e) => setUpdatedUser({ ...updatedUser, address: { ...updatedUser.address, street: e.target.value } })}
-                placeholder="Street"
-                className="p-2 border rounded-md"
-              />
-              <input
-                type="text"
-                value={updatedUser.address.city}
-                onChange={(e) => setUpdatedUser({ ...updatedUser, address: { ...updatedUser.address, city: e.target.value } })}
-                placeholder="City"
-                className="p-2 border rounded-md"
-              />
-              <input
-                type="text"
-                value={updatedUser.address.postalCode}
-                onChange={(e) => setUpdatedUser({ ...updatedUser, address: { ...updatedUser.address, postalCode: e.target.value } })}
-                placeholder="Postal Code"
-                className="p-2 border rounded-md"
-              />
+      <div className="flex-grow flex items-center justify-center p-6">
+        <div className="max-w-2xl w-full bg-white shadow-lg rounded-lg p-6">
+          <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">Account Details</h1>
+
+          <AlertModal
+            isOpen={isAlertModalOpen}
+            onClose={() => setIsAlertModalOpen(false)}
+            message={alertMessage}
+          />
+
+          {user && (
+            <div className="bg-gray-100 p-4 rounded-lg">
+              <form onSubmit={handleUpdate}>
+                <p className="text-lg font-semibold text-gray-700">Name</p>
+                <input
+                  type="text"
+                  value={updatedUser.name}
+                  onChange={(e) => setUpdatedUser({ ...updatedUser, name: e.target.value })}
+                  className="w-full p-2 mt-2 border rounded-md"
+                />
+                <p className="text-lg font-semibold text-gray-700 mt-4">Email</p>
+                <input
+                  type="email"
+                  value={updatedUser.email}
+                  onChange={(e) => setUpdatedUser({ ...updatedUser, email: e.target.value })}
+                  className="w-full p-2 mt-2 border rounded-md"
+                />
+                <h2 className="mt-4 text-xl font-bold text-gray-800">Address</h2>
+                <div className="grid grid-cols-2 gap-4 mt-2">
+                  <input
+                    type="text"
+                    value={updatedUser.address.houseNumber}
+                    onChange={(e) =>
+                      setUpdatedUser({
+                        ...updatedUser,
+                        address: { ...updatedUser.address, houseNumber: e.target.value },
+                      })
+                    }
+                    placeholder="House Number"
+                    className="p-2 border rounded-md"
+                  />
+                  <input
+                    type="text"
+                    value={updatedUser.address.street}
+                    onChange={(e) =>
+                      setUpdatedUser({
+                        ...updatedUser,
+                        address: { ...updatedUser.address, street: e.target.value },
+                      })
+                    }
+                    placeholder="Street"
+                    className="p-2 border rounded-md"
+                  />
+                  <input
+                    type="text"
+                    value={updatedUser.address.city}
+                    onChange={(e) =>
+                      setUpdatedUser({
+                        ...updatedUser,
+                        address: { ...updatedUser.address, city: e.target.value },
+                      })
+                    }
+                    placeholder="City"
+                    className="p-2 border rounded-md"
+                  />
+                  <input
+                    type="text"
+                    value={updatedUser.address.postalCode}
+                    onChange={(e) =>
+                      setUpdatedUser({
+                        ...updatedUser,
+                        address: { ...updatedUser.address, postalCode: e.target.value },
+                      })
+                    }
+                    placeholder="Postal Code"
+                    className="p-2 border rounded-md"
+                  />
+                </div>
+                <div className="flex gap-4 mt-6">
+                  <button
+                    type="submit"
+                    className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300 w-full shadow-md"
+                  >
+                    Update Information
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleDelete}
+                    className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300 w-full shadow-md"
+                  >
+                    Delete Account
+                  </button>
+                </div>
+              </form>
             </div>
-            <div className="flex gap-4 mt-6">
-              <button
-                type="submit"
-                className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300 w-full"
-              >
-                Update Information
-              </button>
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300 w-full"
-              >
-                Delete Account
-              </button>
-            </div>
-          </form>
+          )}
+
+          <div className="flex gap-4 mt-6">
+            <button
+              onClick={handleViewOrders}
+              className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300 w-full shadow-md"
+            >
+              View Orders
+            </button>
+            <button
+              onClick={handleLogout}
+              className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300 w-full shadow-md"
+            >
+              Logout
+            </button>
+          </div>
         </div>
-      )}
-      <div className="flex gap-4 mt-6">
-        <button
-          onClick={handleViewOrders}
-          className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300 w-full"
-        >
-          View Orders
-        </button>
-        <button
-          onClick={handleLogout}
-          className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300 w-full"
-        >
-          Logout
-        </button>
       </div>
     </div>
   );
