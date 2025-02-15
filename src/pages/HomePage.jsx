@@ -32,21 +32,19 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-white-100">
       {/* Background Image Section */}
-      <div className="w-full h-48 sm:h-64 md:h-80 lg:h-96 bg-cover bg-center relative"
-  style={{
-    backgroundImage: `url('https://res.cloudinary.com/duu9km8ss/image/upload/v1739603796/tender-ranunculus-flowers-trendy-ceramic-260nw-2107689617_bnvena.jpg')`,
-  }}
-  role="img"
-  aria-label="Tender ranunculus flowers background"
->
-  {/* Navbar positioned even closer to the top */}
-  <div className="absolute inset-x-0 top-[8%] transform -translate-y-1/2 z-50">
-    <Navbar />
-  </div>
-</div>
-
-
-
+      <div
+        className="w-full h-48 sm:h-64 md:h-80 lg:h-96 bg-cover bg-center relative"
+        style={{
+          backgroundImage: `url('https://res.cloudinary.com/duu9km8ss/image/upload/v1739603796/tender-ranunculus-flowers-trendy-ceramic-260nw-2107689617_bnvena.jpg')`,
+        }}
+        role="img"
+        aria-label="Tender ranunculus flowers background"
+      >
+        {/* Navbar positioned at the top of the background image */}
+        <div className="absolute inset-x-0 top-0 z-50">
+          <Navbar />
+        </div>
+      </div>
 
       {/* Add space between background image and content */}
       <div className="mt-12"></div>
