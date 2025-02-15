@@ -17,6 +17,9 @@ function SignupPage() {
   const navigate = useNavigate();
   const { storeUserData } = useContext(AuthContext); // Use storeUserData from AuthContext
 
+  // Hardcoded API URL
+  const API_URL = "https://flowerstore-api-json-server.onrender.com";
+
   const handleSignupSubmit = (e) => {
     e.preventDefault();
     const requestBody = {
@@ -31,7 +34,6 @@ function SignupPage() {
       },
     };
 
-    const API_URL = import.meta.env.VITE_API_URL;
     console.log("API URL:", API_URL);
 
     axios
@@ -57,7 +59,8 @@ function SignupPage() {
       <Navbar />
 
       {/* Signup Form with increased spacing */}
-      <div className="flex-grow flex justify-center items-center mt-20"> {/* Increased margin-top to mt-20 */}
+      <div className="flex-grow flex justify-center items-center mt-20">
+        {/* Increased margin-top to mt-20 */}
         <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
           <h1 className="text-3xl font-semibold text-center text-blue-600 mb-6">
             Sign Up
@@ -198,7 +201,9 @@ function SignupPage() {
             <p className="text-red-500 text-center mt-4">{errorMessage}</p>
           )}
 
-          <p className="text-center text-gray-600 mt-4">Already have an account?</p>
+          <p className="text-center text-gray-600 mt-4">
+            Already have an account?
+          </p>
           <Link
             to="/login"
             className="text-blue-600 hover:underline text-center block mt-2"
