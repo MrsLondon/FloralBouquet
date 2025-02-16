@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 import AlertModal from "../components/AlertModal";
-import Navbar from "../components/Navbar"; // Import the Navbar component
+import Navbar from "../components/Navbar";
 
 const AccountPage = () => {
   const [user, setUser] = useState(null);
@@ -23,7 +23,7 @@ const AccountPage = () => {
     },
   });
   const navigate = useNavigate();
-  const { logOutUser, updateUser } = useContext(AuthContext); // Destructure updateUser from AuthContext
+  const { logOutUser, updateUser } = useContext(AuthContext);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -64,14 +64,14 @@ const AccountPage = () => {
         `https://flowerstore-api-json-server.onrender.com/users/${user.id}`,
         updatedUser
       );
-      updateUser(response.data); // Use updateUser here
+      updateUser(response.data);
       localStorage.setItem("user", JSON.stringify(response.data));
-      setAlertMessage("User information updated successfully!"); // Set success message
-      setIsAlertModalOpen(true); // Show the AlertModal
+      setAlertMessage("User information updated successfully!");
+      setIsAlertModalOpen(true);
     } catch (error) {
       console.error("Error updating user:", error);
-      setAlertMessage("Failed to update user information. Please try again later."); // Set error message
-      setIsAlertModalOpen(true); // Show the AlertModal
+      setAlertMessage("Failed to update user information. Please try again later.");
+      setIsAlertModalOpen(true);
     }
   };
 
@@ -81,7 +81,7 @@ const AccountPage = () => {
       try {
         await axios.delete(`https://flowerstore-api-json-server.onrender.com/users/${user.id}`);
         localStorage.removeItem("user");
-        updateUser(null); // Clear the global user context
+        updateUser(null);
         navigate("/login");
         alert("Account deleted successfully.");
       } catch (error) {
@@ -92,7 +92,7 @@ const AccountPage = () => {
   };
 
   const handleViewOrders = () => {
-    navigate("/myorder/:orderId"); // Navigate to the MyOrders page
+    navigate("/myorder/:orderId");
   };
 
   if (loading) return <p className="text-center text-gray-500">Loading...</p>;
@@ -100,12 +100,11 @@ const AccountPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Add the Navbar at the top of the page */}
       <Navbar />
 
-      <div className="flex-grow flex items-center justify-center p-6">
-        <div className="max-w-2xl w-full bg-white shadow-lg rounded-lg p-6">
-          <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">Account Details</h1>
+      <div className="flex-grow flex items-center justify-center p-4 sm:p-6">
+        <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-4 sm:p-6">
+          <h1 className="text-xl sm:text-2xl font-bold text-center text-gray-800 mb-4 sm:mb-6">Account Details</h1>
 
           <AlertModal
             isOpen={isAlertModalOpen}
@@ -114,105 +113,53 @@ const AccountPage = () => {
           />
 
           {user && (
-            <div className="bg-gray-100 p-4 rounded-lg">
+            <div className="bg-gray-100 p-3 sm:p-4 rounded-lg">
               <form onSubmit={handleUpdate}>
-                <p className="text-lg font-semibold text-gray-700">Name</p>
-                <input
-                  type="text"
-                  value={updatedUser.name}
-                  onChange={(e) => setUpdatedUser({ ...updatedUser, name: e.target.value })}
-                  className="w-full p-2 mt-2 border rounded-md"
-                />
-                <p className="text-lg font-semibold text-gray-700 mt-4">Email</p>
-                <input
-                  type="email"
-                  value={updatedUser.email}
-                  onChange={(e) => setUpdatedUser({ ...updatedUser, email: e.target.value })}
-                  className="w-full p-2 mt-2 border rounded-md"
-                />
-                <h2 className="mt-4 text-xl font-bold text-gray-800">Address</h2>
-                <div className="grid grid-cols-2 gap-4 mt-2">
+                <div className="space-y-3 sm:space-y-4">
                   <input
                     type="text"
-                    value={updatedUser.address.houseNumber}
-                    onChange={(e) =>
-                      setUpdatedUser({
-                        ...updatedUser,
-                        address: { ...updatedUser.address, houseNumber: e.target.value },
-                      })
-                    }
-                    placeholder="House Number"
-                    className="p-2 border rounded-md"
+                    value={updatedUser.name}
+                    onChange={(e) => setUpdatedUser({ ...updatedUser, name: e.target.value })}
+                    placeholder="Name"
+                    className="w-full p-2 border rounded-md text-sm sm:text-base"
                   />
                   <input
-                    type="text"
-                    value={updatedUser.address.street}
-                    onChange={(e) =>
-                      setUpdatedUser({
-                        ...updatedUser,
-                        address: { ...updatedUser.address, street: e.target.value },
-                      })
-                    }
-                    placeholder="Street"
-                    className="p-2 border rounded-md"
-                  />
-                  <input
-                    type="text"
-                    value={updatedUser.address.city}
-                    onChange={(e) =>
-                      setUpdatedUser({
-                        ...updatedUser,
-                        address: { ...updatedUser.address, city: e.target.value },
-                      })
-                    }
-                    placeholder="City"
-                    className="p-2 border rounded-md"
-                  />
-                  <input
-                    type="text"
-                    value={updatedUser.address.postalCode}
-                    onChange={(e) =>
-                      setUpdatedUser({
-                        ...updatedUser,
-                        address: { ...updatedUser.address, postalCode: e.target.value },
-                      })
-                    }
-                    placeholder="Postal Code"
-                    className="p-2 border rounded-md"
+                    type="email"
+                    value={updatedUser.email}
+                    onChange={(e) => setUpdatedUser({ ...updatedUser, email: e.target.value })}
+                    placeholder="Email"
+                    className="w-full p-2 border rounded-md text-sm sm:text-base"
                   />
                 </div>
-                <div className="flex gap-4 mt-6">
-                  <button
-                    type="submit"
-                    className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300 w-full shadow-md"
-                  >
-                    Update Information
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleDelete}
-                    className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300 w-full shadow-md"
-                  >
-                    Delete Account
-                  </button>
+                <h2 className="mt-4 text-lg font-bold text-gray-800">Address</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-2">
+                  {Object.keys(updatedUser.address).map((key) => (
+                    <input
+                      key={key}
+                      type="text"
+                      value={updatedUser.address[key]}
+                      onChange={(e) => setUpdatedUser({
+                        ...updatedUser,
+                        address: { ...updatedUser.address, [key]: e.target.value },
+                      })}
+                      placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
+                      className="p-2 border rounded-md text-sm sm:text-base"
+                    />
+                  ))}
                 </div>
+                <button
+                  type="submit"
+                  className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 w-full sm:w-auto"
+                >
+                  Update Information
+                </button>
               </form>
             </div>
           )}
-
-          <div className="flex gap-4 mt-6">
-            <button
-              onClick={handleViewOrders}
-              className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300 w-full shadow-md"
-            >
-              View Orders
-            </button>
-            <button
-              onClick={handleLogout}
-              className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300 w-full shadow-md"
-            >
-              Logout
-            </button>
+          <div className="flex flex-col sm:flex-row justify-between mt-4 space-y-3 sm:space-y-0 sm:space-x-4">
+            <button onClick={handleViewOrders} className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 w-full">View Orders</button>
+            <button onClick={handleLogout} className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 w-full">Logout</button>
+            <button onClick={handleDelete} className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 w-full">Delete Account</button>
           </div>
         </div>
       </div>
